@@ -2,29 +2,29 @@ import type { Client } from "@/lib/types";
 
 function LiveTile({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-neutral-200/80 bg-white px-3 py-2.5">
+    <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-2.5">
       <div className="flex items-center justify-between gap-2">
-        <p className="text-[11px] font-medium text-neutral-400">{label}</p>
-        <span className="inline-flex shrink-0 items-center gap-1 text-[10px] font-medium text-emerald-600">
+        <p className="text-[11px] font-medium text-neutral-500">{label}</p>
+        <span className="inline-flex shrink-0 items-center gap-1 text-[10px] font-medium text-emerald-400">
           <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
           Live
         </span>
       </div>
-      <p className="mt-0.5 text-sm font-semibold text-neutral-900">{value}</p>
+      <p className="mt-0.5 text-sm font-semibold text-neutral-100">{value}</p>
     </div>
   );
 }
 
 function RoadmapTile({ label, detail }: { label: string; detail: string }) {
   return (
-    <div className="rounded-lg border border-dashed border-neutral-300 bg-neutral-100/60 px-3 py-2.5">
+    <div className="rounded-lg border border-dashed border-white/15 bg-white/[0.02] px-3 py-2.5">
       <div className="flex items-center justify-between gap-2">
-        <p className="text-[11px] font-medium text-neutral-400">{label}</p>
-        <span className="shrink-0 rounded-full bg-neutral-200 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-neutral-500">
+        <p className="text-[11px] font-medium text-neutral-500">{label}</p>
+        <span className="shrink-0 rounded-full bg-white/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-neutral-400">
           Roadmap
         </span>
       </div>
-      <p className="mt-0.5 text-sm font-medium text-neutral-400">{detail}</p>
+      <p className="mt-0.5 text-sm font-medium text-neutral-500">{detail}</p>
     </div>
   );
 }
@@ -62,25 +62,25 @@ export default function IngestionPanel({ client }: { client: Client }) {
   ];
 
   return (
-    <details className="group glass rounded-xl">
+    <details className="group rounded-xl border border-white/10 bg-white/5">
       <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-5 py-4 [&::-webkit-details-marker]:hidden">
         <div>
-          <p className="text-sm font-medium text-neutral-900">
+          <p className="text-sm font-medium text-neutral-100">
             What Kairos ingests
           </p>
-          <p className="text-xs text-neutral-400">
+          <p className="text-xs text-neutral-500">
             {live.length} live · {roadmap.length} roadmap
           </p>
         </div>
-        <span className="text-neutral-400 transition-transform group-open:rotate-180">
+        <span className="text-neutral-500 transition-transform group-open:rotate-180">
           ⌄
         </span>
       </summary>
 
-      <div className="border-t border-neutral-100 px-5 py-5">
+      <div className="border-t border-white/10 px-5 py-5">
         <div className="flex items-center gap-2">
           <h3 className="text-eyebrow text-neutral-400">Connected</h3>
-          <span className="inline-flex items-center gap-1 text-[10px] font-medium text-emerald-600">
+          <span className="inline-flex items-center gap-1 text-[10px] font-medium text-emerald-400">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
             live now
           </span>

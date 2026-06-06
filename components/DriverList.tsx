@@ -10,15 +10,15 @@ export default function DriverList({ drivers }: { drivers: Driver[] }) {
   }
 
   return (
-    <ul className="elev-card flex flex-col divide-y divide-neutral-100 rounded-xl border border-neutral-200/80 bg-white">
+    <ul className="flex flex-col divide-y divide-white/5 rounded-xl border border-white/10 bg-white/5">
       {drivers.map((driver) => (
         <li key={driver.label} className="flex items-center gap-3 px-4 py-2.5">
-          <span className="flex h-6 w-7 shrink-0 items-center justify-center rounded-md bg-neutral-100 text-[11px] font-semibold tabular-nums text-neutral-600">
+          <span className="flex h-6 w-7 shrink-0 items-center justify-center rounded-md bg-white/10 text-[11px] font-semibold tabular-nums text-neutral-300">
             +{driver.weight}
           </span>
-          <p className="min-w-0 truncate text-sm text-neutral-700">
-            <span className="font-medium text-neutral-900">{driver.label}</span>
-            <span className="text-neutral-400"> — {driver.detail}</span>
+          <p className="min-w-0 truncate text-sm text-neutral-300">
+            <span className="font-medium text-neutral-100">{driver.label}</span>
+            <span className="text-neutral-500"> — {driver.detail}</span>
           </p>
         </li>
       ))}
