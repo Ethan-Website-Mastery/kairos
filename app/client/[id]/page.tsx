@@ -32,7 +32,7 @@ export default async function ClientPage({
   const topDrivers = drivers.slice(0, 3);
 
   return (
-    <div className="mx-auto w-full max-w-3xl">
+    <div className="mx-auto w-full max-w-6xl">
       <Link
         href="/"
         className="text-sm text-neutral-400 transition-colors hover:text-neutral-900"
@@ -40,7 +40,7 @@ export default async function ClientPage({
         &larr; Roster
       </Link>
 
-      <div className="mt-6 flex items-center justify-between gap-4">
+      <div className="mt-4 flex items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight text-neutral-900">
             {client.name}
@@ -50,72 +50,72 @@ export default async function ClientPage({
         <RiskBadge level={level} />
       </div>
 
-      {/* Risk score — compact diagnosis */}
-      <section
-        className={`elev-card mt-6 rounded-xl border bg-white px-5 py-4 ${
-          level === "High" ? "border-rose-200 ring-4 ring-rose-50" : "border-neutral-200/80"
-        }`}
-      >
-        <div className="flex items-baseline justify-between">
-          <p className="text-sm font-medium text-neutral-500">
-            Risk of missing the goal this window
-          </p>
-          <p className="text-xl font-semibold tabular-nums text-neutral-900">
-            {score}
-            <span className="text-sm font-normal text-neutral-400">/100</span>
-          </p>
-        </div>
-        <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-neutral-100">
-          <div
-            className={`h-full rounded-full ${barColor[level]}`}
-            style={{ width: `${score}%` }}
-          />
-        </div>
-      </section>
+      {/* Two-column: left diagnosis (State → Why), right action (Decision →
+          Delivery → Confidence → Loop). Stacks on narrow screens, preserving
+          the demo reading order. */}
+      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">
+        {/* LEFT — diagnosis */}
+        <div className="flex flex-col gap-6">
+          <section
+            className={`elev-card rounded-2xl border bg-white px-5 py-4 ${
+              level === "High"
+                ? "border-rose-200 ring-4 ring-rose-50"
+                : "border-neutral-200/80"
+            }`}
+          >
+            <div className="flex items-baseline justify-between">
+              <p className="text-sm font-medium text-neutral-500">
+                Risk of missing the goal this window
+              </p>
+              <p className="text-xl font-semibold tabular-nums text-neutral-900">
+                {score}
+                <span className="text-sm font-normal text-neutral-400">/100</span>
+              </p>
+            </div>
+            <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-neutral-100">
+              <div
+                className={`h-full rounded-full ${barColor[level]}`}
+                style={{ width: `${score}%` }}
+              />
+            </div>
+          </section>
 
-      {/* Current state */}
-      <section className="mt-8">
-        <h2 className="mb-3 text-eyebrow text-neutral-400">
-          Current state
-        </h2>
-        <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
-          <Stat
-            label="Sessions"
-            value={`${s.sessionsLogged} / ${s.weeklyGoal}`}
-            hint="logged this week"
-          />
-          <Stat label="Recovery" value={`${s.recoveryPct}%`} hint="vs 70% baseline" />
-          <Stat label="Sleep" value={`${s.sleepHrs}h`} hint="nightly average" />
-          <Stat label="HRV" value={`${s.hrv}ms`} />
-          <Stat
-            label="Last check-in"
-            value={`${s.daysSinceCheckIn}d ago`}
-          />
-          <Stat label="Calendar" value={s.calendarLoad} hint="this week" />
-        </div>
-        <div className="mt-3">
-          <IngestionPanel client={client} />
-        </div>
-      </section>
+          <section>
+            <h2 className="mb-3 text-eyebrow text-neutral-400">Current state</h2>
+            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+              <Stat
+                label="Sessions"
+                value={`${s.sessionsLogged} / ${s.weeklyGoal}`}
+                hint="logged this week"
+              />
+              <Stat label="Recovery" value={`${s.recoveryPct}%`} hint="vs 70% baseline" />
+              <Stat label="Sleep" value={`${s.sleepHrs}h`} hint="nightly average" />
+              <Stat label="HRV" value={`${s.hrv}ms`} />
+              <Stat label="Last check-in" value={`${s.daysSinceCheckIn}d ago`} />
+              <Stat label="Calendar" value={s.calendarLoad} hint="this week" />
+            </div>
+            <div className="mt-3">
+              <IngestionPanel client={client} />
+            </div>
+          </section>
 
-      {/* Why */}
-      <section className="mt-8">
-        <h2 className="mb-3 text-eyebrow text-neutral-400">
-          Why &mdash; top drivers
-        </h2>
-        <DriverList drivers={topDrivers} />
-        <p className="mt-2 text-xs text-neutral-400">
-          Transparent weighted sum: each driver adds its points.
-        </p>
-      </section>
+          <section>
+            <h2 className="mb-3 text-eyebrow text-neutral-400">
+              Why &mdash; top drivers
+            </h2>
+            <DriverList drivers={topDrivers} />
+            <p className="mt-2 text-xs text-neutral-400">
+              Transparent weighted sum: each driver adds its points.
+            </p>
+          </section>
+        </div>
 
-      {/* Intervention + loop — the hero of the page */}
-      <section className="mt-12 border-t border-neutral-200 pt-10">
-        <h2 className="mb-4 text-sm font-semibold tracking-tight text-neutral-900">
-          Intervention
-        </h2>
-        <InterventionPanel client={client} />
-      </section>
+        {/* RIGHT — action */}
+        <section className="flex flex-col">
+          <h2 className="mb-3 text-eyebrow text-neutral-400">Intervention</h2>
+          <InterventionPanel client={client} />
+        </section>
+      </div>
     </div>
   );
 }
