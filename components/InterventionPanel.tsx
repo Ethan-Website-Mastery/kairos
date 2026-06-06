@@ -3,12 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Client, Intervention } from "@/lib/types";
 import { computeRisk } from "@/lib/risk";
-import {
-  improvedSignals,
-  buildLoopEvents,
-  leverConfidence,
-  confidenceAfter,
-} from "@/lib/loop";
+import { improvedSignals, buildLoopEvents, leverTrackRecord } from "@/lib/loop";
 import InterventionCard from "./InterventionCard";
 import PatternMemory from "./PatternMemory";
 import ClientPreview from "./ClientPreview";
@@ -59,14 +54,13 @@ export default function InterventionPanel({ client }: { client: Client }) {
   const atRisk = before.level !== "Low";
   const firstName = client.name.split(" ")[0];
 
-  // Confidence is grounded in this person's history, not a magic number.
-  const conf = intervention
-    ? leverConfidence(intervention.leverId, client.signals.history)
+  // Track record: honest count of prior successes with this lever for this
+  // person (0 = a new play). Never a fabricated number.
+  const trackRecord = intervention
+    ? leverTrackRecord(intervention.leverId, client.signals.history)
     : 0;
-  const confNext = intervention ? confidenceAfter(conf) : 0;
 
-  // Payoff animations — only run once the coach approves & sends.
-  const confVal = useCountTo(conf, confNext, approved);
+  // Payoff animation — only runs once the coach approves & sends.
   const sessVal = useCountTo(
     client.signals.sessionsLogged,
     improved.sessionsLogged,
@@ -181,7 +175,16 @@ export default function InterventionPanel({ client }: { client: Client }) {
     );
   }
 
-  const steps = buildLoopEvents(client, before, intervention, conf, confNext);
+  const steps = buildLoopEvents(client, before, intervention, trackRecord);
+
+  // Honest, deterministic track-record line — no invented ratio.
+  const lever = intervention.leverName;
+  const times =
+    trackRecord === 1 ? "once" : trackRecord === 2 ? "twice" : `${trackRecord} times`;
+  const trackLine =
+    trackRecord > 0
+      ? `${lever} has worked for ${firstName} ${times} before — Kairos logs this as success #${trackRecord + 1} and weights it higher.`
+      : `${lever} is a new play for ${firstName} — Kairos weights it higher with each success.`;
 
   return (
     <div className="flex flex-col gap-4">
@@ -281,39 +284,33 @@ export default function InterventionPanel({ client }: { client: Client }) {
 
       {approved && (
         <div className="flex flex-col gap-4">
-          {/* THE CLIMAX — confidence rises. The system's belief, not a behaviour
-              prediction. */}
+          {/* THE CLIMAX — the lever's track record for this person grows. An
+              honest count from history, not a fabricated percentage. */}
           <div className="elev-climax overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-50/80 to-white/40 p-6 ring-1 ring-emerald-200/80 backdrop-blur-xl backdrop-saturate-150">
-            <p className="text-eyebrow text-emerald-700">
-              Confidence in this lever
+            <p className="text-eyebrow text-emerald-700">Track record</p>
+            <p className="mt-2 text-[15px] font-medium leading-relaxed text-neutral-800">
+              {trackLine}
             </p>
-            <p className="mt-1 text-sm text-neutral-500">
-              Kairos&apos;s belief that {intervention.leverName} works for{" "}
-              {firstName} — grounded in her history, not a prediction of her
-              behaviour.
-            </p>
-            <div className="mt-3 flex items-baseline gap-3">
-              <span className="text-3xl font-semibold tabular-nums text-neutral-300 line-through">
-                {conf}%
+
+            {/* one pip per logged success: prior wins + this newly confirmed one */}
+            <div className="mt-4 flex flex-wrap items-center gap-1.5">
+              {Array.from({ length: trackRecord }, (_, i) => (
+                <span
+                  key={`prior-${i}`}
+                  className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-100 text-xs font-bold text-emerald-700"
+                >
+                  ✓
+                </span>
+              ))}
+              <span className="animate-rise flex h-6 w-6 items-center justify-center rounded-md bg-emerald-500 text-xs font-bold text-white ring-2 ring-emerald-200">
+                ✓
               </span>
-              <span className="text-2xl text-emerald-500">↑</span>
-              <span className="text-6xl font-bold tabular-nums leading-none text-neutral-900">
-                {confVal}%
-              </span>
-              <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-sm font-semibold text-emerald-700">
-                +{confNext - conf}
+              <span className="ml-1 text-sm text-neutral-500">
+                logged as #{trackRecord + 1}, weighted higher
               </span>
             </div>
 
-            {/* bar tracks the confidence rise */}
-            <div className="mt-5 h-2.5 w-full overflow-hidden rounded-full bg-neutral-200/60">
-              <div
-                className="h-full rounded-full bg-emerald-500 transition-all duration-300"
-                style={{ width: `${confVal}%` }}
-              />
-            </div>
-
-            {/* honest follow-through action (not a risk claim) */}
+            {/* honest follow-through action */}
             <span className="animate-flash mt-4 inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm ring-1 ring-emerald-200/60">
               <span className="text-neutral-500">{firstName} logged the session</span>
               <span className="font-semibold tabular-nums text-neutral-900">

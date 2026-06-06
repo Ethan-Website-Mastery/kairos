@@ -21,16 +21,9 @@ export function improvedSignals(signals: Signals): Signals {
   };
 }
 
-/* ── Confidence: the system's belief in a lever for a person ──
-   Grounded in how often that lever has worked for them before, NOT a
-   prediction of their behaviour. More prior successes → higher confidence. */
-
-const CONF_BASE = 60;
-const CONF_PER_SUCCESS = 10;
-const CONF_CAP = 90;
-const CONF_AFTER_CAP = 95;
-/** One confirmed follow-through nudges belief up by this much. */
-export const CONF_LEARNING_STEP = 12;
+/* ── Track record: how many times this lever has worked for this person ──
+   An HONEST count from seeded history — no invented denominator or ratio.
+   Each confirmed success is logged and weighted higher next time. */
 
 /** Keywords that tie a free-text past success to a lever id. */
 const LEVER_KEYWORDS: Record<string, string[]> = {
@@ -45,8 +38,12 @@ const LEVER_KEYWORDS: Record<string, string[]> = {
   timing: ["morning", "evening", "early", "slot", "lunchtime", "midday"],
 };
 
-/** How many of this person's past successes align with the chosen lever. */
-export function leverPriorSuccesses(
+/**
+ * How many recorded past successes this person has with the chosen lever —
+ * the lever's track record for them. Counts matches in leversThatWorked; 0
+ * means no prior record (a new play), never a fabricated number.
+ */
+export function leverTrackRecord(
   leverId: string,
   history: Signals["history"],
 ): number {
@@ -57,40 +54,26 @@ export function leverPriorSuccesses(
   }).length;
 }
 
-/** Current confidence (%) that this lever works for this person. */
-export function leverConfidence(
-  leverId: string,
-  history: Signals["history"],
-): number {
-  const successes = leverPriorSuccesses(leverId, history);
-  return Math.min(CONF_CAP, CONF_BASE + successes * CONF_PER_SUCCESS);
-}
-
-/** Confidence after one more confirmed follow-through. */
-export function confidenceAfter(confidence: number): number {
-  return Math.min(CONF_AFTER_CAP, confidence + CONF_LEARNING_STEP);
-}
-
 export interface LoopStep {
   label: string;
   detail: string;
-  /** The confidence beat — emphasized in the timeline. */
+  /** The track-record beat — emphasized in the timeline. */
   highlight?: boolean;
 }
 
 /**
  * The five beats of the closed loop, built from REAL values: the original
- * prediction, the chosen intervention, and the engine's confidence in it.
+ * prediction, the chosen intervention, and this lever's track record.
  */
 export function buildLoopEvents(
   client: Client,
   before: RiskResult,
   intervention: Intervention,
-  confidence: number,
-  confidenceNext: number,
+  trackRecord: number,
 ): LoopStep[] {
   const firstName = client.name.split(" ")[0];
   const topDriver = before.drivers[0];
+  const lever = intervention.leverName;
 
   return [
     {
@@ -101,20 +84,23 @@ export function buildLoopEvents(
     },
     {
       label: "Intervened",
-      detail: `${intervention.leverName} · ${intervention.channel} · ${intervention.timing}`,
+      detail: `${lever} · ${intervention.channel} · ${intervention.timing}`,
     },
     {
       label: "Followed through",
       detail: `${firstName} logged their session`,
     },
     {
-      label: "Confidence updated",
-      detail: `${confidence}% → ${confidenceNext}% that ${intervention.leverName} works for ${firstName}`,
+      label: "Track record updated",
+      detail: `${lever} → logged again for ${firstName}, weighted higher`,
       highlight: true,
     },
     {
       label: "Logged for learning",
-      detail: `${intervention.leverName} confirmed for ${firstName} — confidence up, weighted higher next time`,
+      detail:
+        trackRecord > 0
+          ? `${lever} has now worked ${trackRecord + 1}× for ${firstName} — weighted higher next time`
+          : `${lever} logged as a first win for ${firstName} — weighted higher next time`,
     },
   ];
 }
