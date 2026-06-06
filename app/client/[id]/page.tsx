@@ -69,8 +69,10 @@ export default async function ClientPage({
       </section>
 
       {/* Current state */}
-      <section className="mt-8">
-        <h2 className="mb-3 text-sm font-medium text-neutral-500">Current state</h2>
+      <section className="mt-12">
+        <h2 className="mb-4 text-xs font-medium uppercase tracking-wider text-neutral-400">
+          Current state
+        </h2>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           <Stat
             label="Sessions"
@@ -89,8 +91,8 @@ export default async function ClientPage({
       </section>
 
       {/* Why */}
-      <section className="mt-8">
-        <h2 className="mb-3 text-sm font-medium text-neutral-500">
+      <section className="mt-12">
+        <h2 className="mb-4 text-xs font-medium uppercase tracking-wider text-neutral-400">
           Why &mdash; top drivers
         </h2>
         <DriverList drivers={topDrivers} />
@@ -99,9 +101,11 @@ export default async function ClientPage({
         </p>
       </section>
 
-      {/* Intervention */}
-      <section className="mt-8">
-        <h2 className="mb-3 text-sm font-medium text-neutral-500">Intervention</h2>
+      {/* Intervention + loop */}
+      <section className="mt-12">
+        <h2 className="mb-4 text-xs font-medium uppercase tracking-wider text-neutral-400">
+          Intervention
+        </h2>
         <InterventionPanel client={client} />
       </section>
     </main>
