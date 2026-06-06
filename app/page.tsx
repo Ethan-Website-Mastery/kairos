@@ -18,7 +18,7 @@ export default function Dashboard() {
   const needWord = high === 1 ? "needs" : "need";
 
   return (
-    <main className="mx-auto w-full max-w-5xl px-6 py-16">
+    <div className="mx-auto w-full max-w-5xl">
       <header className="mb-10">
         <p className="text-eyebrow text-neutral-400">
           Kairos
@@ -92,7 +92,7 @@ export default function Dashboard() {
           </div>
         </section>
       )}
-    </main>
+    </div>
   );
 }
 

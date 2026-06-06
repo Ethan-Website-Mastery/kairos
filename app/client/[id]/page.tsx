@@ -32,7 +32,7 @@ export default async function ClientPage({
   const topDrivers = drivers.slice(0, 3);
 
   return (
-    <main className="mx-auto w-full max-w-3xl px-6 py-16">
+    <div className="mx-auto w-full max-w-3xl">
       <Link
         href="/"
         className="text-sm text-neutral-400 transition-colors hover:text-neutral-900"
@@ -116,6 +116,6 @@ export default async function ClientPage({
         </h2>
         <InterventionPanel client={client} />
       </section>
-    </main>
+    </div>
   );
 }
