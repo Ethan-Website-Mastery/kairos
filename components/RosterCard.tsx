@@ -56,7 +56,7 @@ export default function RosterCard({
   return (
     <Link
       href={`/client/${client.id}`}
-      className={`group flex flex-col gap-4 rounded-2xl border bg-white p-5 shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-all hover:shadow-[0_2px_20px_-8px_rgba(0,0,0,0.15)] ${accent} ${className}`}
+      className={`elev-card hover:elev-card-hover group flex flex-col gap-4 rounded-2xl border bg-white p-5 transition-all ${accent} ${className}`}
     >
       <div className="flex items-start justify-between gap-4">
         <div className="flex min-w-0 items-center gap-3">

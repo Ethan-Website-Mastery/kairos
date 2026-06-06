@@ -211,10 +211,10 @@ export default function InterventionPanel({ client }: { client: Client }) {
       ) : (
         <div className="flex flex-col gap-4">
           {/* THE CLIMAX — risk falls. The single most dramatic moment. */}
-          <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-50 to-white p-6 ring-1 ring-emerald-200/80 shadow-[0_8px_40px_-12px_rgba(16,185,129,0.35)]">
+          <div className="elev-climax overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-50 to-white p-6 ring-1 ring-emerald-200/80">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-widest text-emerald-700">
+                <p className="text-eyebrow text-emerald-700">
                   Risk after follow-through
                 </p>
                 <div className="mt-2 flex items-baseline gap-3">

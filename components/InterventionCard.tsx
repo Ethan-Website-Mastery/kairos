@@ -23,10 +23,8 @@ export default function InterventionCard({
   const summary = getLever(intervention.leverId)?.summary;
 
   return (
-    <div className="rounded-2xl border border-neutral-200/80 bg-white p-5 shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_-14px_rgba(0,0,0,0.18)]">
-      <p className="text-[11px] font-semibold uppercase tracking-wider text-neutral-400">
-        Kairos recommends
-      </p>
+    <div className="elev-raised rounded-2xl border border-neutral-200/80 bg-white p-5">
+      <p className="text-eyebrow text-neutral-400">Kairos recommends</p>
 
       {/* Discrimination is the centerpiece: chosen vs deliberately rejected. */}
       <div className="mt-3 grid gap-3 sm:grid-cols-2">

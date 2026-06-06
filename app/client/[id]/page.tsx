@@ -51,7 +51,7 @@ export default async function ClientPage({
 
       {/* Risk score — compact diagnosis */}
       <section
-        className={`mt-6 rounded-xl border bg-white px-5 py-4 shadow-[0_1px_2px_rgba(0,0,0,0.04)] ${
+        className={`elev-card mt-6 rounded-xl border bg-white px-5 py-4 ${
           level === "High" ? "border-rose-200 ring-4 ring-rose-50" : "border-neutral-200/80"
         }`}
       >
@@ -74,7 +74,7 @@ export default async function ClientPage({
 
       {/* Current state */}
       <section className="mt-6">
-        <h2 className="mb-3 text-[11px] font-semibold uppercase tracking-widest text-neutral-400">
+        <h2 className="mb-3 text-eyebrow text-neutral-400">
           Current state
         </h2>
         <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
@@ -96,7 +96,7 @@ export default async function ClientPage({
 
       {/* Why */}
       <section className="mt-6">
-        <h2 className="mb-3 text-[11px] font-semibold uppercase tracking-widest text-neutral-400">
+        <h2 className="mb-3 text-eyebrow text-neutral-400">
           Why &mdash; top drivers
         </h2>
         <DriverList drivers={topDrivers} />

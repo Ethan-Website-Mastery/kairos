@@ -20,7 +20,7 @@ export default function Dashboard() {
   return (
     <main className="mx-auto w-full max-w-5xl px-6 py-16">
       <header className="mb-10">
-        <p className="text-[11px] font-semibold uppercase tracking-widest text-neutral-400">
+        <p className="text-eyebrow text-neutral-400">
           Kairos
         </p>
         <h1 className="mt-1 text-2xl font-semibold tracking-tight text-neutral-900">
@@ -60,7 +60,7 @@ export default function Dashboard() {
 
       {attention.length > 0 && (
         <section className="mb-12">
-          <h2 className="mb-4 text-[11px] font-semibold uppercase tracking-widest text-neutral-400">
+          <h2 className="mb-4 text-eyebrow text-neutral-400">
             Needs attention
           </h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -82,7 +82,7 @@ export default function Dashboard() {
 
       {onTrack.length > 0 && (
         <section>
-          <h2 className="mb-4 text-[11px] font-semibold uppercase tracking-widest text-neutral-400">
+          <h2 className="mb-4 text-eyebrow text-neutral-400">
             On track
           </h2>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
