@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Client } from "@/lib/types";
+import type { Driver } from "@/lib/risk";
 import { riskOf } from "@/lib/data";
 import RiskBadge from "./RiskBadge";
 
@@ -12,9 +13,40 @@ function initials(name: string): string {
     .toUpperCase();
 }
 
-export default function RosterCard({ client }: { client: Client }) {
+/** Compact, scannable form of a risk driver for the roster card. */
+function abbreviate(d: Driver): string {
+  const L = d.label;
+  if (L.startsWith("Recovery")) return L.replace("Recovery down", "recovery");
+  if (L === "Gone quiet") {
+    const days = d.detail.match(/^(\d+)/)?.[1] ?? "";
+    return `${days}d quiet`;
+  }
+  if (L === "Behind pace") return "behind pace";
+  if (L === "Packed calendar") return "calendar packed";
+  if (L === "Busy calendar") return "calendar busy";
+  if (L === "Short sleep") {
+    const h = d.detail.match(/([\d.]+)h/)?.[1];
+    return h ? `sleep ${h}h` : "low sleep";
+  }
+  if (L === "Slow to respond") return "slow to reply";
+  if (L === "History of slips") return "slip history";
+  return L.toLowerCase();
+}
+
+export default function RosterCard({
+  client,
+  className = "",
+}: {
+  client: Client;
+  className?: string;
+}) {
   const { sessionsLogged, weeklyGoal } = client.signals;
-  const { level } = riskOf(client);
+  const { level, drivers } = riskOf(client);
+  const atRisk = level !== "Low";
+
+  const why = atRisk
+    ? drivers.slice(0, 3).map(abbreviate).join(" · ")
+    : null;
 
   const accent =
     level === "High"
@@ -24,22 +56,26 @@ export default function RosterCard({ client }: { client: Client }) {
   return (
     <Link
       href={`/client/${client.id}`}
-      className={`group flex flex-col gap-5 rounded-2xl border bg-white p-6 transition-all hover:shadow-[0_2px_20px_-8px_rgba(0,0,0,0.15)] ${accent}`}
+      className={`group flex flex-col gap-4 rounded-2xl border bg-white p-5 shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition-all hover:shadow-[0_2px_20px_-8px_rgba(0,0,0,0.15)] ${accent} ${className}`}
     >
       <div className="flex items-start justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <span className="flex h-10 w-10 items-center justify-center rounded-full bg-neutral-100 text-sm font-semibold text-neutral-600">
+        <div className="flex min-w-0 items-center gap-3">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-sm font-semibold text-neutral-600">
             {initials(client.name)}
           </span>
-          <div>
-            <h2 className="font-semibold text-neutral-900">{client.name}</h2>
-            <p className="text-sm text-neutral-500">{client.weeklyGoal}</p>
+          <div className="min-w-0">
+            <h2 className="truncate font-semibold text-neutral-900">
+              {client.name}
+            </h2>
+            <p className="truncate text-xs text-neutral-500">
+              {why ?? client.weeklyGoal}
+            </p>
           </div>
         </div>
         <RiskBadge level={level} />
       </div>
 
-      <div className="flex items-center justify-between border-t border-neutral-100 pt-4">
+      <div className="flex items-center justify-between border-t border-neutral-100 pt-3">
         <div className="text-sm text-neutral-500">
           <span className="font-medium text-neutral-900">{sessionsLogged}</span>
           <span className="text-neutral-400"> / {weeklyGoal}</span> sessions this week
