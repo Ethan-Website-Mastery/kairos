@@ -140,14 +140,14 @@ export default function InterventionPanel({ client }: { client: Client }) {
   // Low-risk client: nothing to do but watch.
   if (!atRisk && !intervention && !drafting) {
     return (
-      <div className="flex flex-col items-start gap-3 rounded-2xl border border-neutral-200/80 bg-white p-6">
-        <p className="text-sm text-neutral-600">
+      <div className="flex flex-col items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-6">
+        <p className="text-sm text-neutral-300">
           {firstName} is on track — Kairos is monitoring and hasn&apos;t flagged
           anything.
         </p>
         <button
           onClick={draft}
-          className="text-xs text-neutral-400 transition-colors hover:text-neutral-900"
+          className="text-xs text-neutral-500 transition-colors hover:text-neutral-200"
         >
           Draft one anyway
         </button>
@@ -157,8 +157,8 @@ export default function InterventionPanel({ client }: { client: Client }) {
 
   if (drafting) {
     return (
-      <div className="flex items-center gap-3 rounded-2xl border border-neutral-200/80 bg-white p-6 text-sm text-neutral-500">
-        <span className="h-4 w-4 animate-spin rounded-full border-2 border-neutral-200 border-t-neutral-900" />
+      <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-6 text-sm text-neutral-400">
+        <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/15 border-t-emerald-400" />
         Kairos noticed the risk and is drafting a nudge…
       </div>
     );
@@ -168,7 +168,7 @@ export default function InterventionPanel({ client }: { client: Client }) {
     return (
       <button
         onClick={draft}
-        className="inline-flex items-center gap-2 rounded-xl bg-neutral-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-neutral-700"
+        className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-medium text-neutral-900 transition-colors hover:bg-neutral-200"
       >
         Draft intervention
       </button>
@@ -191,12 +191,12 @@ export default function InterventionPanel({ client }: { client: Client }) {
       {!approved && (
         <>
           {/* Proactive frame: Kairos already noticed and drafted. */}
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 rounded-xl bg-rose-50 px-4 py-2.5 ring-1 ring-inset ring-rose-100">
-            <span className="h-2 w-2 rounded-full bg-rose-500" />
-            <span className="text-sm font-medium text-neutral-900">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 rounded-xl bg-rose-500/10 px-4 py-2.5 ring-1 ring-inset ring-rose-400/25">
+            <span className="h-2 w-2 animate-pulse rounded-full bg-rose-500" />
+            <span className="text-sm font-medium text-neutral-100">
               Kairos flagged this client
             </span>
-            <span className="text-sm text-neutral-500">
+            <span className="text-sm text-neutral-400">
               · Drafted intervention — awaiting your approval
             </span>
           </div>
@@ -226,26 +226,26 @@ export default function InterventionPanel({ client }: { client: Client }) {
           <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={() => setApproved(true)}
-              className="inline-flex items-center gap-2 rounded-xl bg-neutral-900 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-neutral-700"
+              className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-4 py-2.5 text-sm font-medium text-neutral-950 transition-colors hover:bg-emerald-400"
             >
               Approve &amp; send
             </button>
             <button
               onClick={draft}
-              className="inline-flex items-center gap-2 rounded-xl border border-neutral-300 bg-white px-4 py-2.5 text-sm font-medium text-neutral-900 transition-colors hover:border-neutral-400 hover:bg-neutral-50"
+              className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-medium text-neutral-200 transition-colors hover:bg-white/10"
             >
               Adjust
             </button>
             <button
               onClick={toggleHow}
-              className="ml-auto text-xs font-medium text-neutral-400 transition-colors hover:text-neutral-900"
+              className="ml-auto text-xs font-medium text-neutral-400 transition-colors hover:text-neutral-100"
             >
               {showHow ? "Hide" : "How Kairos decided"}
             </button>
           </div>
 
           {showHow && (
-            <div className="rounded-2xl border border-neutral-200/80 bg-white p-6">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
               <p className="mb-4 text-eyebrow text-neutral-400">
                 How Kairos decided
               </p>
@@ -259,16 +259,16 @@ export default function InterventionPanel({ client }: { client: Client }) {
                     >
                       <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center">
                         {done ? (
-                          <span className="text-emerald-600">✓</span>
+                          <span className="text-emerald-400">✓</span>
                         ) : (
-                          <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-neutral-200 border-t-neutral-700" />
+                          <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/15 border-t-emerald-400" />
                         )}
                       </span>
                       <span
                         className={
                           i === 1 || i === 3
-                            ? "font-medium text-neutral-900"
-                            : "text-neutral-600"
+                            ? "font-medium text-neutral-100"
+                            : "text-neutral-400"
                         }
                       >
                         {stepText(i)}
@@ -286,9 +286,9 @@ export default function InterventionPanel({ client }: { client: Client }) {
         <div className="flex flex-col gap-4">
           {/* THE CLIMAX — the lever's track record for this person grows. An
               honest count from history, not a fabricated percentage. */}
-          <div className="elev-climax overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-50/80 to-white/40 p-6 ring-1 ring-emerald-200/80 backdrop-blur-xl backdrop-saturate-150">
-            <p className="text-eyebrow text-emerald-700">Track record</p>
-            <p className="mt-2 text-[15px] font-medium leading-relaxed text-neutral-800">
+          <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500/15 to-transparent p-6 ring-1 ring-emerald-400/30 shadow-[0_0_40px_-12px_rgba(16,185,129,0.4)]">
+            <p className="text-eyebrow text-emerald-300">Track record</p>
+            <p className="mt-2 text-[15px] font-medium leading-relaxed text-neutral-100">
               {trackLine}
             </p>
 
@@ -297,31 +297,31 @@ export default function InterventionPanel({ client }: { client: Client }) {
               {Array.from({ length: trackRecord }, (_, i) => (
                 <span
                   key={`prior-${i}`}
-                  className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-100 text-xs font-bold text-emerald-700"
+                  className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-500/20 text-xs font-bold text-emerald-300"
                 >
                   ✓
                 </span>
               ))}
-              <span className="animate-rise flex h-6 w-6 items-center justify-center rounded-md bg-emerald-500 text-xs font-bold text-white ring-2 ring-emerald-200">
+              <span className="animate-rise flex h-6 w-6 items-center justify-center rounded-md bg-emerald-500 text-xs font-bold text-neutral-950 ring-2 ring-emerald-400/40">
                 ✓
               </span>
-              <span className="ml-1 text-sm text-neutral-500">
+              <span className="ml-1 text-sm text-neutral-400">
                 logged as #{trackRecord + 1}, weighted higher
               </span>
             </div>
 
             {/* honest follow-through action */}
-            <span className="animate-flash mt-4 inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm ring-1 ring-emerald-200/60">
-              <span className="text-neutral-500">{firstName} logged the session</span>
-              <span className="font-semibold tabular-nums text-neutral-900">
+            <span className="animate-flash mt-4 inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm ring-1 ring-emerald-400/30">
+              <span className="text-neutral-400">{firstName} logged the session</span>
+              <span className="font-semibold tabular-nums text-neutral-100">
                 {sessVal}/{client.signals.weeklyGoal}
               </span>
             </span>
           </div>
 
           {/* The flywheel */}
-          <div className="rounded-2xl border border-neutral-200/80 bg-white p-6">
-            <p className="mb-4 text-sm font-medium text-neutral-500">
+          <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
+            <p className="mb-4 text-sm font-medium text-neutral-400">
               Closing the loop
             </p>
             <LoopTimeline steps={steps} />
@@ -329,7 +329,7 @@ export default function InterventionPanel({ client }: { client: Client }) {
 
           <button
             onClick={() => setApproved(false)}
-            className="self-start text-xs text-neutral-400 transition-colors hover:text-neutral-900"
+            className="self-start text-xs text-neutral-500 transition-colors hover:text-neutral-200"
           >
             Reset
           </button>

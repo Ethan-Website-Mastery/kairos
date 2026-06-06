@@ -23,10 +23,10 @@ export default function ClientPreview({
   const cbId = `lockin-${id}`;
 
   return (
-    <div className="elev-card rounded-2xl border border-neutral-200/80 bg-white p-5">
+    <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
       <div className="flex items-center justify-between gap-3">
         <p className="text-eyebrow text-neutral-400">Client preview</p>
-        <span className="text-xs text-neutral-400">
+        <span className="text-xs text-neutral-500">
           How {firstName} receives it
         </span>
       </div>
@@ -41,25 +41,25 @@ export default function ClientPreview({
         <div className="flex w-full max-w-[280px] flex-col items-center gap-2 peer-checked:hidden">
           <label
             htmlFor={cbId}
-            className="w-full cursor-pointer rounded-xl bg-neutral-900 px-4 py-2.5 text-center text-sm font-medium text-white transition-colors hover:bg-neutral-700"
+            className="w-full cursor-pointer rounded-xl bg-white px-4 py-2.5 text-center text-sm font-medium text-neutral-900 transition-colors hover:bg-neutral-200"
           >
             {actionLabel}
           </label>
           <label
             htmlFor={cbId}
-            className="cursor-pointer text-xs text-neutral-400 transition-colors hover:text-neutral-900"
+            className="cursor-pointer text-xs text-neutral-500 transition-colors hover:text-neutral-200"
           >
             I&apos;m in
           </label>
         </div>
 
-        <div className="hidden w-full max-w-[280px] items-center justify-center gap-2 rounded-xl bg-emerald-50 px-4 py-2.5 text-sm font-medium text-emerald-700 ring-1 ring-inset ring-emerald-200/70 peer-checked:flex">
+        <div className="hidden w-full max-w-[280px] items-center justify-center gap-2 rounded-xl bg-emerald-500/15 px-4 py-2.5 text-sm font-medium text-emerald-300 ring-1 ring-inset ring-emerald-400/30 peer-checked:flex">
           <span aria-hidden>✓</span>
           {confirmText}
         </div>
       </div>
 
-      <p className="mt-4 text-center text-[11px] text-neutral-400">
+      <p className="mt-4 text-center text-[11px] text-neutral-500">
         Preview only — illustration of the client&apos;s side, not a shipped app.
       </p>
     </div>

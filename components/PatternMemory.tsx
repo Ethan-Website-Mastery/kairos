@@ -51,12 +51,12 @@ export default function PatternMemory({ client }: { client: Client }) {
   const sentence = `Slipped ${countWord(slips)} before${dayClause}.${recovered}`;
 
   return (
-    <div className="rounded-xl bg-neutral-50 px-4 py-3 ring-1 ring-inset ring-neutral-200/70">
+    <div className="rounded-xl bg-white/5 px-4 py-3 ring-1 ring-inset ring-white/10">
       <p className="flex items-center gap-1.5 text-eyebrow text-neutral-400">
         <span aria-hidden>◆</span>
         Kairos remembers {firstName}
       </p>
-      <p className="mt-1 text-sm text-neutral-700">{sentence}</p>
+      <p className="mt-1 text-sm text-neutral-300">{sentence}</p>
     </div>
   );
 }
