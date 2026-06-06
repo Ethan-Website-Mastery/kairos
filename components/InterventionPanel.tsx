@@ -201,10 +201,7 @@ export default function InterventionPanel({ client }: { client: Client }) {
             </span>
           </div>
 
-          <InterventionCard
-            intervention={intervention}
-            memory={<PatternMemory client={client} />}
-          />
+          <InterventionCard intervention={intervention} />
 
           <ClientPreview
             id={client.id}
@@ -246,6 +243,30 @@ export default function InterventionPanel({ client }: { client: Client }) {
 
           {showHow && (
             <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
+              {/* the demoted depth: reasoning logic + pattern memory */}
+              {intervention.reasoningBullets.length > 0 && (
+                <>
+                  <p className="mb-2 text-eyebrow text-neutral-400">
+                    Why this lever
+                  </p>
+                  <ul className="mb-4 flex flex-col gap-1.5">
+                    {intervention.reasoningBullets.map((b, i) => (
+                      <li
+                        key={i}
+                        className="flex gap-2.5 text-sm leading-snug text-neutral-200"
+                      >
+                        <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
+                        <span>{b}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+
+              <div className="mb-4">
+                <PatternMemory client={client} />
+              </div>
+
               <p className="mb-4 text-eyebrow text-neutral-400">
                 How Kairos decided
               </p>
