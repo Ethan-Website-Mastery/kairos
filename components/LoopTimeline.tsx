@@ -10,7 +10,11 @@ export default function LoopTimeline({ steps }: { steps: LoopStep[] }) {
         className="absolute left-[7px] top-2 bottom-2 w-px bg-neutral-200"
       />
       {steps.map((step, i) => (
-        <li key={step.label} className="relative flex gap-4 pb-5 last:pb-0">
+        <li
+          key={step.label}
+          className="animate-rise relative flex gap-4 pb-5 last:pb-0"
+          style={{ animationDelay: `${i * 200}ms` }}
+        >
           <span className="relative z-10 mt-1 flex h-4 w-4 shrink-0 items-center justify-center">
             <span
               className={`h-2.5 w-2.5 rounded-full ring-4 ring-white ${

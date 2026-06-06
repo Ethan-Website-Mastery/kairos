@@ -17,8 +17,8 @@ export default function PhoneMock({
             9:41
           </p>
 
-          {/* notification */}
-          <div className="rounded-2xl bg-white/95 p-3 backdrop-blur">
+          {/* notification — slides down + fades like a real push arriving */}
+          <div className="animate-notif rounded-2xl bg-white/95 p-3 backdrop-blur">
             <div className="mb-1.5 flex items-center gap-2">
               <span className="flex h-6 w-6 items-center justify-center rounded-md bg-neutral-900 text-[10px] font-bold text-white">
                 K

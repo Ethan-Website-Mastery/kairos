@@ -1,12 +1,42 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Client, Intervention } from "@/lib/types";
 import { computeRisk } from "@/lib/risk";
 import { improvedSignals, buildLoopEvents } from "@/lib/loop";
 import InterventionCard from "./InterventionCard";
 import LoopTimeline from "./LoopTimeline";
 import RiskBadge from "./RiskBadge";
+
+/** Animate an integer from `from` to `to` once `run` flips true (eased). */
+function useCountTo(from: number, to: number, run: boolean, duration = 600) {
+  const [value, setValue] = useState(from);
+  useEffect(() => {
+    if (!run) {
+      const reset = requestAnimationFrame(() => setValue(from));
+      return () => cancelAnimationFrame(reset);
+    }
+    let raf = 0;
+    let start: number | null = null;
+    const tick = (t: number) => {
+      if (start === null) start = t;
+      const p = Math.min(1, (t - start) / duration);
+      const eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
+      setValue(Math.round(from + (to - from) * eased));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [from, to, run, duration]);
+  return value;
+}
+
+/** Same thresholds as the risk model (HIGH ≥ 65, MEDIUM ≥ 30). */
+function colorForScore(score: number): string {
+  if (score >= 65) return "bg-rose-500";
+  if (score >= 30) return "bg-amber-500";
+  return "bg-emerald-500";
+}
 
 export default function InterventionPanel({ client }: { client: Client }) {
   const [intervention, setIntervention] = useState<Intervention | null>(null);
@@ -19,9 +49,18 @@ export default function InterventionPanel({ client }: { client: Client }) {
     () => computeRisk(client.signals, client.signals.history),
     [client],
   );
+  const improved = useMemo(() => improvedSignals(client.signals), [client]);
   const after = useMemo(
-    () => computeRisk(improvedSignals(client.signals), client.signals.history),
-    [client],
+    () => computeRisk(improved, client.signals.history),
+    [improved, client.signals.history],
+  );
+
+  // Payoff animations — only run once the loop is simulated.
+  const scoreVal = useCountTo(before.score, after.score, looped);
+  const sessVal = useCountTo(
+    client.signals.sessionsLogged,
+    improved.sessionsLogged,
+    looped,
   );
 
   async function generate() {
@@ -86,30 +125,48 @@ export default function InterventionPanel({ client }: { client: Client }) {
         </div>
       ) : (
         <div className="flex flex-col gap-5">
-          {/* Updated risk with a clear drop */}
-          <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-emerald-200 bg-emerald-50/50 p-5">
-            <div>
-              <p className="text-xs font-medium text-emerald-700">
-                Risk after follow-through
-              </p>
-              <div className="mt-1 flex items-baseline gap-3">
-                <span className="text-2xl font-semibold tabular-nums text-neutral-400 line-through">
-                  {before.score}
-                </span>
-                <span className="text-emerald-600">↓</span>
-                <span className="text-3xl font-semibold tabular-nums text-neutral-900">
-                  {after.score}
-                </span>
-                <span className="text-sm font-medium text-emerald-700">
-                  −{drop}
-                </span>
+          {/* Updated risk with an animated drop */}
+          <div className="rounded-2xl border border-emerald-200 bg-emerald-50/50 p-5">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <p className="text-xs font-medium text-emerald-700">
+                  Risk after follow-through
+                </p>
+                <div className="mt-1 flex items-baseline gap-3">
+                  <span className="text-2xl font-semibold tabular-nums text-neutral-400 line-through">
+                    {before.score}
+                  </span>
+                  <span className="text-emerald-600">↓</span>
+                  <span className="text-3xl font-semibold tabular-nums text-neutral-900">
+                    {scoreVal}
+                  </span>
+                  <span className="text-sm font-medium text-emerald-700">
+                    −{drop}
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <RiskBadge level={before.level} />
+                <span className="text-neutral-300">→</span>
+                <RiskBadge level={after.level} />
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <RiskBadge level={before.level} />
-              <span className="text-neutral-300">→</span>
-              <RiskBadge level={after.level} />
+
+            {/* bar tracks the count-down, colour shifts red → amber → green */}
+            <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-white/70">
+              <div
+                className={`h-full rounded-full transition-all duration-300 ${colorForScore(scoreVal)}`}
+                style={{ width: `${scoreVal}%` }}
+              />
             </div>
+
+            {/* session ticks up with a brief highlight */}
+            <span className="animate-flash mt-3 inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm">
+              <span className="text-neutral-400">Sessions</span>
+              <span className="font-semibold tabular-nums text-neutral-900">
+                {sessVal}/{client.signals.weeklyGoal}
+              </span>
+            </span>
           </div>
 
           {/* The flywheel */}
