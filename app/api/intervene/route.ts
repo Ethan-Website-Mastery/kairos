@@ -20,11 +20,12 @@ Rules:
 - Choose exactly one lever, by its id, from the library.
 - Prefer a lever that has worked for this person before; avoid any that previously failed.
 - Ground your reasoning in this person's ACTUAL signals and history — name the specific facts (e.g. "recovery down 41%", "6 days quiet").
+- Output reasoning as reasoningBullets: 2-3 TERSE bullets, each ≤ ~12 words, following diagnosis → history → choice. Bullet 1 = the failure TYPE with the evidence. Bullet 2 = what's worked for THIS person before. Bullet 3 = the resulting choice, starting with "→". No filler, no full sentences.
 - Diagnosing the failure TYPE is the core of your job: decide whether the risk is logistical, motivational, physiological, or accountability-driven, then pick the lever that matches THAT type — and name one lever you deliberately rejected and why it's wrong for this person.
 - predictedMoment MUST be a SPECIFIC day and time taken from the schedule below — derive it from plannedSessions, openWindows, and pastSlipDays (a planned session that lands on a past-slip day, in their only open window, is the highest-risk moment). NEVER invent a day or slot the schedule doesn't support. Then set timing to fire the nudge a fixed lead-time BEFORE that moment (e.g. the evening before a 7am window).
 - Match tone and timing to their state: low recovery + gone quiet calls for warm and low-pressure, never guilt.
 - The message must be short (1-2 sentences), human, and sendable to the client exactly as written.
-- Be ruthless about length. HARD CAPS: reasoning ≤ 2 sentences; predictedMoment ≤ 1 punchy line (lead with the moment, keep the justification minimal); rejected.why ≤ 1 sentence; message 1-2 sentences. Cut filler.
+- Be ruthless about length. HARD CAPS: reasoningBullets 2-3 bullets of ≤ ~12 words each; predictedMoment ≤ 1 punchy line (lead with the moment, keep the justification minimal); rejected.why ≤ 1 crisp line; message 1-2 sentences. Cut filler.
 - Output ONLY valid JSON. No markdown, no code fences, no commentary.`;
 
 function buildUserMessage(client: Client, risk: RiskResult): string {
@@ -67,7 +68,7 @@ ${levers}
 Respond with JSON only in this exact shape:
 {
   "leverId": "<one library id>",
-  "reasoning": "<= 2 sentences grounded in this person's specific signals + history>",
+  "reasoningBullets": ["<failure type + evidence, =12 words>", "<what's worked for them before>", "<→ the resulting choice>"],
   "message": "<the nudge the client receives, 1-2 sentences>",
   "channel": "<push notification | WhatsApp | in-app>",
   "timing": "<when the nudge fires — a fixed lead-time BEFORE predictedMoment, e.g. 'Wed 8pm'>",
@@ -147,13 +148,19 @@ export async function POST(req: Request) {
       why: typeof rawRejected.why === "string" ? rawRejected.why : "",
     };
 
+    const reasoningBullets = Array.isArray(parsed.reasoningBullets)
+      ? parsed.reasoningBullets
+          .filter((b): b is string => typeof b === "string" && b.trim().length > 0)
+          .map((b) => b.trim())
+          .slice(0, 3)
+      : [];
+
     const intervention: Intervention = {
       clientId,
       leverId: lever.id,
       // Canonical name from the library — never the model's leverName.
       leverName: lever.name,
-      reasoning:
-        typeof parsed.reasoning === "string" ? parsed.reasoning : "",
+      reasoningBullets,
       message: message.trim(),
       channel:
         typeof parsed.channel === "string" ? parsed.channel : "push notification",

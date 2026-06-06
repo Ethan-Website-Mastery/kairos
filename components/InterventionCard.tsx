@@ -77,9 +77,24 @@ export default function InterventionCard({
       {memory && <div className="mt-3">{memory}</div>}
 
       <div className="mt-4">
-        <p className="text-[15px] leading-relaxed text-neutral-800">
-          {intervention.reasoning}
-        </p>
+        {/* Why THIS lever — the logic, as terse beats. Distinct from the
+            "Why — top drivers" list (that = why she's at risk). */}
+        {intervention.reasoningBullets.length > 0 && (
+          <>
+            <p className="mb-2 text-eyebrow text-neutral-400">Why this lever</p>
+            <ul className="flex flex-col gap-1.5">
+              {intervention.reasoningBullets.map((b, i) => (
+                <li
+                  key={i}
+                  className="flex gap-2.5 text-sm leading-snug text-neutral-800"
+                >
+                  <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-neutral-900" />
+                  <span>{b}</span>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
 
         <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs">
           <Meta label="Channel" value={intervention.channel} />

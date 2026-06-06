@@ -51,7 +51,8 @@ export interface Intervention {
   clientId: string;
   leverId: string;
   leverName: string;
-  reasoning: string;
+  /** 2-3 terse bullets: diagnosis → what's worked before → the choice. */
+  reasoningBullets: string[];
   message: string;
   channel: string;
   timing: string;
