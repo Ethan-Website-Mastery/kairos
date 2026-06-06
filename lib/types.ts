@@ -12,9 +12,15 @@ export interface Signals {
   daysSinceCheckIn: number;
   calendarLoad: CalendarLoad;
   nudgeResponseLatencyHrs: number;
+  /** Days the client plans to train, e.g. ["Tue", "Thu"]. */
+  plannedSessions: string[];
+  /** Concrete free slots they could actually train in, e.g. ["Thu 7am"]. */
+  openWindows: string[];
   history: {
     pastSlips: string[];
     leversThatWorked: string[];
+    /** Days of the week they've historically slipped, e.g. ["Thu"]. */
+    pastSlipDays?: string[];
   };
 }
 

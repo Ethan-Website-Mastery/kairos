@@ -106,13 +106,13 @@ export const FALLBACKS: Record<string, Intervention> = {
     message:
       "Hey Maya — brutal week, I see it. Let's not aim for the full hour: 20 minutes before your first meeting tomorrow and we call it a win. I'll have it ready.",
     channel: "WhatsApp",
-    timing: "Tomorrow 7:00am, before her first meeting",
+    timing: "Wed 8:00pm, the night before",
     tone: "warm, low-pressure",
     rejected: {
       leverName: "Identity-based framing",
       why: "A pep talk misreads the problem — she isn't short on willpower, her week is logistically packed.",
     },
     predictedMoment:
-      "Tomorrow 7am — her only open window before a packed day. Miss it and the week's unrecoverable.",
+      "Thursday 7am — her only open window before a packed day, and the day she's slipped before.",
   },
 };

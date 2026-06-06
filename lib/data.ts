@@ -20,15 +20,18 @@ export const clients: Client[] = [
       daysSinceCheckIn: 6,
       calendarLoad: "packed",
       nudgeResponseLatencyHrs: 28,
+      plannedSessions: ["Tue", "Thu"],
+      openWindows: ["Thu 7am"],
       history: {
         pastSlips: [
           "Dropped off for 10 days after a work trip in March",
-          "Skipped 3 weeks when a project deadline hit",
+          "Skipped her Thursday session 3 weeks running when a deadline hit",
         ],
         leversThatWorked: [
           "Shorter 20-min sessions during busy weeks",
           "Morning reminder before her first meeting",
         ],
+        pastSlipDays: ["Thu"],
       },
     },
   },
@@ -45,9 +48,12 @@ export const clients: Client[] = [
       daysSinceCheckIn: 3,
       calendarLoad: "busy",
       nudgeResponseLatencyHrs: 9,
+      plannedSessions: ["Mon", "Wed", "Sat"],
+      openWindows: ["Wed 6pm", "Sat 9am"],
       history: {
         pastSlips: ["Lost momentum over the December holidays"],
         leversThatWorked: ["Pairing workouts with a friend", "Weekend long runs"],
+        pastSlipDays: ["Wed"],
       },
     },
   },
@@ -64,6 +70,8 @@ export const clients: Client[] = [
       daysSinceCheckIn: 1,
       calendarLoad: "light",
       nudgeResponseLatencyHrs: 2,
+      plannedSessions: ["Mon", "Tue", "Wed", "Thu", "Fri"],
+      openWindows: ["Mon 6am", "Wed 6am", "Fri 6am"],
       history: {
         pastSlips: [],
         leversThatWorked: ["Streak tracking", "Early-morning slots"],
@@ -83,6 +91,8 @@ export const clients: Client[] = [
       daysSinceCheckIn: 2,
       calendarLoad: "busy",
       nudgeResponseLatencyHrs: 4,
+      plannedSessions: ["Tue", "Thu", "Sat", "Sun"],
+      openWindows: ["Tue 6pm", "Sat 8am"],
       history: {
         pastSlips: ["Took two weeks off after a minor knee strain"],
         leversThatWorked: ["Swapping runs for cycling when sore", "Evening sessions"],
@@ -102,9 +112,12 @@ export const clients: Client[] = [
       daysSinceCheckIn: 2,
       calendarLoad: "busy",
       nudgeResponseLatencyHrs: 5,
+      plannedSessions: ["Mon", "Wed", "Thu", "Sat"],
+      openWindows: ["Mon 6pm", "Sat 10am"],
       history: {
         pastSlips: ["Stopped for a month after moving apartments"],
         leversThatWorked: ["Booking classes a week ahead", "A Monday gym buddy"],
+        pastSlipDays: ["Wed"],
       },
     },
   },
@@ -121,6 +134,8 @@ export const clients: Client[] = [
       daysSinceCheckIn: 1,
       calendarLoad: "busy",
       nudgeResponseLatencyHrs: 3,
+      plannedSessions: ["Mon", "Tue", "Thu", "Fri"],
+      openWindows: ["Thu 7pm"],
       history: {
         pastSlips: [],
         leversThatWorked: ["Evening lifting blocks", "Monthly progress photos"],
@@ -140,6 +155,8 @@ export const clients: Client[] = [
       daysSinceCheckIn: 1,
       calendarLoad: "light",
       nudgeResponseLatencyHrs: 2,
+      plannedSessions: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+      openWindows: ["Sat 8am"],
       history: {
         pastSlips: [],
         leversThatWorked: ["Streak tracking", "Saturday long ride with the club"],
@@ -159,6 +176,8 @@ export const clients: Client[] = [
       daysSinceCheckIn: 2,
       calendarLoad: "busy",
       nudgeResponseLatencyHrs: 6,
+      plannedSessions: ["Tue", "Thu", "Sun"],
+      openWindows: ["Tue 12pm", "Thu 12pm"],
       history: {
         pastSlips: ["Took December off over the holidays"],
         leversThatWorked: ["Lunchtime runs between meetings"],

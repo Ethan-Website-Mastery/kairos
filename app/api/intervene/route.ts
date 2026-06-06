@@ -20,7 +20,8 @@ Rules:
 - Choose exactly one lever, by its id, from the library.
 - Prefer a lever that has worked for this person before; avoid any that previously failed.
 - Ground your reasoning in this person's ACTUAL signals and history — name the specific facts (e.g. "recovery down 41%", "6 days quiet").
-- Diagnosing the failure TYPE is the core of your job: decide whether the risk is logistical, motivational, physiological, or accountability-driven, then pick the lever that matches THAT type — and name one lever you deliberately rejected and why it's wrong for this person. Also identify the specific upcoming moment they're most likely to slip, grounded in their actual signals (calendar, quiet streak, recovery), and time the nudge to land just before it. Never invent a moment the signals don't support.
+- Diagnosing the failure TYPE is the core of your job: decide whether the risk is logistical, motivational, physiological, or accountability-driven, then pick the lever that matches THAT type — and name one lever you deliberately rejected and why it's wrong for this person.
+- predictedMoment MUST be a SPECIFIC day and time taken from the schedule below — derive it from plannedSessions, openWindows, and pastSlipDays (a planned session that lands on a past-slip day, in their only open window, is the highest-risk moment). NEVER invent a day or slot the schedule doesn't support. Then set timing to fire the nudge a fixed lead-time BEFORE that moment (e.g. the evening before a 7am window).
 - Match tone and timing to their state: low recovery + gone quiet calls for warm and low-pressure, never guilt.
 - The message must be short (1-2 sentences), human, and sendable to the client exactly as written.
 - Be ruthless about length. HARD CAPS: reasoning ≤ 2 sentences; predictedMoment ≤ 1 punchy line (lead with the moment, keep the justification minimal); rejected.why ≤ 1 sentence; message 1-2 sentences. Cut filler.
@@ -47,6 +48,11 @@ CURRENT SIGNALS:
   - Calendar load: ${s.calendarLoad}
   - Nudge response latency: ${s.nudgeResponseLatencyHrs}h
 
+SCHEDULE (ground predictedMoment in this — do not invent days/slots):
+  - Planned sessions: ${s.plannedSessions.length ? s.plannedSessions.join(", ") : "none set"}
+  - Open windows: ${s.openWindows.length ? s.openWindows.join(", ") : "none free"}
+  - Past slip days: ${s.history.pastSlipDays?.length ? s.history.pastSlipDays.join(", ") : "none recorded"}
+
 RISK: score ${risk.score}/100 (${risk.level})
 TOP DRIVERS:
 ${drivers || "  - (none firing)"}
@@ -64,10 +70,10 @@ Respond with JSON only in this exact shape:
   "reasoning": "<= 2 sentences grounded in this person's specific signals + history>",
   "message": "<the nudge the client receives, 1-2 sentences>",
   "channel": "<push notification | WhatsApp | in-app>",
-  "timing": "<e.g. Today 6:30pm, before her usual gym window>",
+  "timing": "<when the nudge fires — a fixed lead-time BEFORE predictedMoment, e.g. 'Wed 8pm'>",
   "tone": "<e.g. warm, low-pressure>",
   "rejected": { "leverName": "<a plausible lever Kairos deliberately did NOT pick>", "why": "<= 1 sentence: why it's wrong for THIS person's failure type>" },
-  "predictedMoment": "<= 1 punchy line; moment leads, justification minimal — e.g. 'Tomorrow 7am — her only open window before a packed day'>"
+  "predictedMoment": "<= 1 punchy line; a SPECIFIC day/time from the schedule — e.g. 'Thursday 7am — her only open window before a packed day'>"
 }`;
 }
 
