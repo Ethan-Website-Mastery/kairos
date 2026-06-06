@@ -206,14 +206,51 @@ body {
   animation: pulse-alert 1.3s ease-in-out infinite;
 }
 
+/* Emanating alert ping on the high-risk avatar — an outward "about to slip"
+   signal, like a sonar contact. */
+@keyframes ping-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(2.1);
+    opacity: 0;
+  }
+}
+
+.ping-ring {
+  animation: ping-ring 1.7s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Slow scanning sweep across the roster field = active monitoring. */
+@keyframes scan-sweep {
+  0% {
+    transform: translateX(-60%);
+  }
+  100% {
+    transform: translateX(360%);
+  }
+}
+
+.scan-sweep {
+  animation: scan-sweep 6s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-notif,
   .animate-rise,
   .animate-flash,
   .pulse-calm,
   .pulse-watch,
-  .pulse-alert {
+  .pulse-alert,
+  .ping-ring,
+  .scan-sweep {
     animation: none;
+  }
+  /* Static scanner line is distracting at rest — hide it. */
+  .scan-sweep {
+    display: none;
   }
   /* Keep a static glow so the high-risk client still stands out without motion. */
   .pulse-alert {
