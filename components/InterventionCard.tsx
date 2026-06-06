@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { Intervention } from "@/lib/types";
 import { getLever } from "@/lib/interventions";
 import PhoneMock from "./PhoneMock";
@@ -13,8 +14,11 @@ function Meta({ label, value }: { label: string; value: string }) {
 
 export default function InterventionCard({
   intervention,
+  memory,
 }: {
   intervention: Intervention;
+  /** Optional "Kairos remembers …" element, shown above the reasoning. */
+  memory?: ReactNode;
 }) {
   const { rejected, predictedMoment, timing } = intervention;
   const hasRejected = Boolean(rejected?.leverName);
@@ -69,6 +73,9 @@ export default function InterventionCard({
           )}
         </div>
       )}
+
+      {/* Pattern memory grounds the lever choice in this person's real past. */}
+      {memory && <div className="mt-3">{memory}</div>}
 
       <div className="mt-4 grid gap-6 sm:grid-cols-[1fr_auto] sm:items-start">
         <div>

@@ -10,6 +10,7 @@ import {
   confidenceAfter,
 } from "@/lib/loop";
 import InterventionCard from "./InterventionCard";
+import PatternMemory from "./PatternMemory";
 import LoopTimeline from "./LoopTimeline";
 
 /** Animate an integer from `from` to `to` once `run` flips true (eased). */
@@ -196,7 +197,10 @@ export default function InterventionPanel({ client }: { client: Client }) {
             </span>
           </div>
 
-          <InterventionCard intervention={intervention} />
+          <InterventionCard
+            intervention={intervention}
+            memory={<PatternMemory client={client} />}
+          />
 
           <div className="flex flex-wrap items-center gap-3">
             <button
