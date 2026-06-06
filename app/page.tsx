@@ -5,6 +5,7 @@ import { FALLBACKS } from "@/lib/interventions";
 import RosterCard from "@/components/RosterCard";
 import RosterPulse from "@/components/RosterPulse";
 import LiveActivityFeed from "@/components/LiveActivityFeed";
+import CatchMoment from "@/components/CatchMoment";
 import {
   UsersIcon,
   AlertIcon,
@@ -51,12 +52,13 @@ export default function Dashboard() {
   return (
     <div className="mx-auto w-full max-w-6xl">
       {/* Command-center hero — dark "ops" band: living roster + activity feed */}
-      <div className="mb-6 overflow-hidden rounded-3xl bg-neutral-950 p-3 shadow-[0_24px_70px_-30px_rgba(0,0,0,0.7)] ring-1 ring-white/10">
+      <div className="relative mb-6 overflow-hidden rounded-3xl bg-neutral-950 p-3 shadow-[0_24px_70px_-30px_rgba(0,0,0,0.7)] ring-1 ring-white/10">
         <div className="mb-2 flex items-center gap-2 px-3 pt-2">
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
           <span className="text-eyebrow text-neutral-500">
             Kairos command center
           </span>
+          <CatchMoment />
         </div>
         <div className="grid gap-3 lg:grid-cols-3">
           <div className="lg:col-span-2">
