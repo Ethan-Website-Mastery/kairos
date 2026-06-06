@@ -23,9 +23,6 @@ export interface Client {
   name: string;
   /** Human-readable goal, e.g. "4 sessions/week". */
   weeklyGoal: string;
-  /** Placeholder for now; replaced by model-driven scoring in a later brief. */
-  riskScore: number;
-  risk: RiskLevel;
   signals: Signals;
 }
 

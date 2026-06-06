@@ -1,4 +1,5 @@
 import type { Client } from "./types";
+import { computeRisk, type RiskResult } from "./risk";
 
 /**
  * Seeded, in-memory roster. No DB.
@@ -10,8 +11,6 @@ export const clients: Client[] = [
     id: "maya-okafor",
     name: "Maya Okafor",
     weeklyGoal: "4 sessions/week",
-    riskScore: 82,
-    risk: "High",
     signals: {
       sleepHrs: 5.4,
       hrv: 38,
@@ -37,8 +36,6 @@ export const clients: Client[] = [
     id: "daniel-reyes",
     name: "Daniel Reyes",
     weeklyGoal: "3 sessions/week",
-    riskScore: 48,
-    risk: "Medium",
     signals: {
       sleepHrs: 6.6,
       hrv: 52,
@@ -58,8 +55,6 @@ export const clients: Client[] = [
     id: "priya-sharma",
     name: "Priya Sharma",
     weeklyGoal: "5 sessions/week",
-    riskScore: 17,
-    risk: "Low",
     signals: {
       sleepHrs: 7.8,
       hrv: 71,
@@ -79,8 +74,6 @@ export const clients: Client[] = [
     id: "tom-becker",
     name: "Tom Becker",
     weeklyGoal: "4 sessions/week",
-    riskScore: 24,
-    risk: "Low",
     signals: {
       sleepHrs: 7.1,
       hrv: 64,
@@ -100,4 +93,9 @@ export const clients: Client[] = [
 
 export function getClient(id: string): Client | undefined {
   return clients.find((c) => c.id === id);
+}
+
+/** Single source of truth for a client's risk — derived, never stored. */
+export function riskOf(client: Client): RiskResult {
+  return computeRisk(client.signals, client.signals.history);
 }

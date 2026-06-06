@@ -1,8 +1,8 @@
-import { clients } from "@/lib/data";
+import { clients, riskOf } from "@/lib/data";
 import RosterCard from "@/components/RosterCard";
 
 export default function Dashboard() {
-  const atRisk = clients.filter((c) => c.risk !== "Low").length;
+  const atRisk = clients.filter((c) => riskOf(c).level !== "Low").length;
 
   return (
     <main className="mx-auto w-full max-w-5xl px-6 py-16">

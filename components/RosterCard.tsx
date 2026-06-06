@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Client } from "@/lib/types";
+import { riskOf } from "@/lib/data";
 import RiskBadge from "./RiskBadge";
 
 function initials(name: string): string {
@@ -13,6 +14,7 @@ function initials(name: string): string {
 
 export default function RosterCard({ client }: { client: Client }) {
   const { sessionsLogged, weeklyGoal } = client.signals;
+  const { level } = riskOf(client);
 
   return (
     <Link
@@ -29,7 +31,7 @@ export default function RosterCard({ client }: { client: Client }) {
             <p className="text-sm text-neutral-500">{client.weeklyGoal}</p>
           </div>
         </div>
-        <RiskBadge level={client.risk} />
+        <RiskBadge level={level} />
       </div>
 
       <div className="flex items-center justify-between border-t border-neutral-100 pt-4">
