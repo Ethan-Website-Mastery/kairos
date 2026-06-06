@@ -115,4 +115,42 @@ export const FALLBACKS: Record<string, Intervention> = {
     predictedMoment:
       "Thursday 7am — her only open window before a packed day, and the day she's slipped before.",
   },
+  // Broken streak / lost momentum -> loss aversion.
+  "aisha-khan": {
+    clientId: "aisha-khan",
+    leverId: "loss_aversion",
+    leverName: "Loss aversion / streak",
+    reasoning:
+      "Aisha's calendar is clear and she's well recovered, so this isn't logistics or fatigue — it's lost momentum after a 14-week streak broke last week. Streak tracking is what's always kept her honest, so Kairos reframes this week as protecting the comeback, not starting over.",
+    message:
+      "Aisha — that 14-week streak only has one crack in it, not a collapse. Tonight's session is how you keep it alive — don't let one miss become two.",
+    channel: "in-app",
+    timing: "Wed 12:00pm, midday before",
+    tone: "encouraging, momentum-focused",
+    rejected: {
+      leverName: "Friction engineering",
+      why: "Shrinking the ask misreads it — her calendar's clear and she's recovered, so there's no friction to remove.",
+    },
+    predictedMoment:
+      "Wednesday 6pm — the session that broke her streak last week.",
+  },
+  // Motivational dip, stable logistics -> identity framing.
+  "daniel-reyes": {
+    clientId: "daniel-reyes",
+    leverId: "identity_framing",
+    leverName: "Identity-based framing",
+    reasoning:
+      "Daniel's logistics are fine — light calendar, recovery at 75% — so this is a motivation dip, not a barrier, now that his goal race has wrapped up. He still sees himself as a runner, so Kairos reconnects him to that identity instead of nagging about the session count.",
+    message:
+      "Daniel — you're a runner between races, not someone who stops. A short Wednesday evening loop tonight is just you being you.",
+    channel: "push notification",
+    timing: "Wed 1:00pm, ahead of the evening",
+    tone: "affirming, identity-first",
+    rejected: {
+      leverName: "Loss aversion / streak",
+      why: "A streak threat would ring hollow — he isn't chasing a chain, he's reconnecting with being a runner.",
+    },
+    predictedMoment:
+      "Wednesday 6pm — his planned run, the one he's let slide before.",
+  },
 };
