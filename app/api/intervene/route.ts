@@ -20,6 +20,7 @@ Rules:
 - Choose exactly one lever, by its id, from the library.
 - Prefer a lever that has worked for this person before; avoid any that previously failed.
 - Ground your reasoning in this person's ACTUAL signals and history — name the specific facts (e.g. "recovery down 41%", "6 days quiet").
+- Diagnosing the failure TYPE is the core of your job: decide whether the risk is logistical, motivational, physiological, or accountability-driven, then pick the lever that matches THAT type — and name one lever you deliberately rejected and why it's wrong for this person. Also identify the specific upcoming moment they're most likely to slip, grounded in their actual signals (calendar, quiet streak, recovery), and time the nudge to land just before it. Never invent a moment the signals don't support.
 - Match tone and timing to their state: low recovery + gone quiet calls for warm and low-pressure, never guilt.
 - The message must be short (1-2 sentences), human, and sendable to the client exactly as written.
 - Output ONLY valid JSON. No markdown, no code fences, no commentary.`;
@@ -63,7 +64,9 @@ Respond with JSON only in this exact shape:
   "message": "<the nudge the client receives, 1-2 sentences>",
   "channel": "<push notification | WhatsApp | in-app>",
   "timing": "<e.g. Today 6:30pm, before her usual gym window>",
-  "tone": "<e.g. warm, low-pressure>"
+  "tone": "<e.g. warm, low-pressure>",
+  "rejected": { "leverName": "<a plausible lever Kairos deliberately did NOT pick>", "why": "<one line: why it's wrong for THIS person's failure type>" },
+  "predictedMoment": "<specific upcoming moment of vulnerability, grounded in a real driver — e.g. 'her next planned session, calendar packed with no clear gym window'>"
 }`;
 }
 
@@ -126,6 +129,17 @@ export async function POST(req: Request) {
       return NextResponse.json(fallbackFor(clientId));
     }
 
+    // Non-critical fields — parse defensively, never trigger a fallback.
+    const rawRejected =
+      parsed.rejected && typeof parsed.rejected === "object"
+        ? (parsed.rejected as Record<string, unknown>)
+        : {};
+    const rejected = {
+      leverName:
+        typeof rawRejected.leverName === "string" ? rawRejected.leverName : "",
+      why: typeof rawRejected.why === "string" ? rawRejected.why : "",
+    };
+
     const intervention: Intervention = {
       clientId,
       leverId: lever.id,
@@ -138,6 +152,9 @@ export async function POST(req: Request) {
         typeof parsed.channel === "string" ? parsed.channel : "push notification",
       timing: typeof parsed.timing === "string" ? parsed.timing : "",
       tone: typeof parsed.tone === "string" ? parsed.tone : "",
+      rejected,
+      predictedMoment:
+        typeof parsed.predictedMoment === "string" ? parsed.predictedMoment : "",
     };
 
     // Only cache real results, so a transient failure never poisons the cache.

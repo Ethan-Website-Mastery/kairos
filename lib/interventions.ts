@@ -83,6 +83,11 @@ export function genericFallback(clientId: string): Intervention {
     channel: "push notification",
     timing: "Today, late afternoon",
     tone: "warm, low-pressure",
+    rejected: {
+      leverName: "Loss aversion / streak",
+      why: "no streak to protect yet — threatening a loss would only add pressure.",
+    },
+    predictedMoment: "the end of today, when the day slips by without a session slotted in",
   };
 }
 
@@ -103,5 +108,11 @@ export const FALLBACKS: Record<string, Intervention> = {
     channel: "WhatsApp",
     timing: "Tonight 8:00pm, ahead of tomorrow morning",
     tone: "warm, low-pressure",
+    rejected: {
+      leverName: "Identity-based framing",
+      why: "a motivational pep talk misreads the problem — Maya isn't lacking willpower, her week is logistically packed.",
+    },
+    predictedMoment:
+      "tomorrow morning before her first meeting — her last open window before a packed Thu–Fri with no gym slot",
   },
 };

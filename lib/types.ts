@@ -50,6 +50,10 @@ export interface Intervention {
   channel: string;
   timing: string;
   tone: string;
+  /** A lever Kairos deliberately did NOT pick, and why it's wrong here. */
+  rejected: { leverName: string; why: string };
+  /** The specific upcoming moment of vulnerability the nudge fires before. */
+  predictedMoment: string;
 }
 
 /** One step in the predict → intervene → observe loop, for auditing. */
