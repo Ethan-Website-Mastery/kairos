@@ -102,7 +102,7 @@ export default async function ClientPage({
       {/* Intervention */}
       <section className="mt-8">
         <h2 className="mb-3 text-sm font-medium text-neutral-500">Intervention</h2>
-        <InterventionPanel clientId={client.id} />
+        <InterventionPanel client={client} />
       </section>
     </main>
   );
