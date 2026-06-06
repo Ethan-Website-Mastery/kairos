@@ -6,17 +6,17 @@ import IngestionPanel from "@/components/IngestionPanel";
 import InterventionPanel from "@/components/InterventionPanel";
 import LiveClientMonitor from "@/components/LiveClientMonitor";
 
-const barColor = { Low: "bg-emerald-500", Medium: "bg-amber-500", High: "bg-rose-500" };
-
-function Stat({ label, value, hint }: { label: string; value: string; hint?: string }) {
+function Chip({ dot, children }: { dot: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-2">
-      <p className="text-[11px] font-medium text-neutral-500">{label}</p>
-      <p className="mt-0.5 text-sm font-semibold text-neutral-100">{value}</p>
-      {hint && <p className="text-[11px] text-neutral-500">{hint}</p>}
-    </div>
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-sm text-neutral-200">
+      <span className={`h-1.5 w-1.5 rounded-full ${dot}`} />
+      {children}
+    </span>
   );
 }
+
+const sev = (good: boolean, warn: boolean) =>
+  good ? "bg-emerald-500" : warn ? "bg-amber-400" : "bg-rose-500";
 
 export default async function ClientPage({
   params,
@@ -27,9 +27,10 @@ export default async function ClientPage({
   const client = getClient(id);
   if (!client) notFound();
 
-  const { score, level, drivers } = riskOf(client);
+  const { drivers } = riskOf(client);
   const s = client.signals;
   const topDrivers = drivers.slice(0, 3);
+  const ratio = s.sessionsLogged / s.weeklyGoal;
 
   return (
     <div className="mx-auto w-full max-w-6xl">
@@ -44,63 +45,53 @@ export default async function ClientPage({
       <div className="mt-4 rounded-3xl bg-neutral-950 p-4 shadow-[0_24px_70px_-30px_rgba(0,0,0,0.7)] ring-1 ring-white/10 sm:p-6">
         <LiveClientMonitor client={client} />
 
-        {/* Two-column: left diagnosis (State → Why), right action (Decision →
-            Delivery → Confidence → Loop). Stacks on narrow screens. */}
         <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">
-          {/* LEFT — diagnosis */}
-          <div className="flex flex-col gap-6">
-            <section
-              className={`rounded-2xl border bg-white/5 px-5 py-4 ${
-                level === "High"
-                  ? "border-rose-500/40 ring-1 ring-rose-500/30"
-                  : "border-white/10"
-              }`}
-            >
-              <div className="flex items-baseline justify-between">
-                <p className="text-sm font-medium text-neutral-400">
-                  Risk of missing the goal this window
-                </p>
-                <p className="text-xl font-semibold tabular-nums text-white">
-                  {score}
-                  <span className="text-sm font-normal text-neutral-500">/100</span>
-                </p>
+          {/* LEFT — diagnosis (glanceable chips; depth in expanders) */}
+          <div className="flex flex-col gap-5">
+            <section>
+              <h2 className="mb-3 text-eyebrow text-neutral-400">Signals</h2>
+              <div className="flex flex-wrap gap-2">
+                <Chip dot={sev(s.recoveryPct >= 70, s.recoveryPct >= 60)}>
+                  Recovery {s.recoveryPct}%{s.recoveryPct < 70 ? " ↓" : ""}
+                </Chip>
+                <Chip dot={sev(ratio >= 0.8, ratio >= 0.5)}>
+                  {s.sessionsLogged}/{s.weeklyGoal} sessions
+                </Chip>
+                <Chip
+                  dot={sev(
+                    s.daysSinceCheckIn < 3,
+                    s.daysSinceCheckIn < 5,
+                  )}
+                >
+                  {s.daysSinceCheckIn >= 3 ? "Quiet" : "Check-in"}{" "}
+                  {s.daysSinceCheckIn}d
+                </Chip>
+                <Chip
+                  dot={sev(
+                    s.calendarLoad === "light",
+                    s.calendarLoad === "busy",
+                  )}
+                >
+                  Calendar {s.calendarLoad}
+                </Chip>
               </div>
-              <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
-                <div
-                  className={`h-full rounded-full ${barColor[level]}`}
-                  style={{ width: `${score}%` }}
-                />
-              </div>
+
+              {/* depth: the weighted breakdown, one click away */}
+              <details className="group mt-3">
+                <summary className="flex cursor-pointer list-none items-center gap-1.5 text-xs font-medium text-neutral-500 transition-colors hover:text-neutral-300 [&::-webkit-details-marker]:hidden">
+                  <span className="transition-transform group-open:rotate-180">⌄</span>
+                  Weighted breakdown
+                </summary>
+                <div className="mt-3">
+                  <DriverList drivers={topDrivers} />
+                  <p className="mt-2 text-xs text-neutral-500">
+                    Transparent weighted sum: each driver adds its points.
+                  </p>
+                </div>
+              </details>
             </section>
 
-            <section>
-              <h2 className="mb-3 text-eyebrow text-neutral-400">Current state</h2>
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                <Stat
-                  label="Sessions"
-                  value={`${s.sessionsLogged} / ${s.weeklyGoal}`}
-                  hint="logged this week"
-                />
-                <Stat label="Recovery" value={`${s.recoveryPct}%`} hint="vs 70% baseline" />
-                <Stat label="Sleep" value={`${s.sleepHrs}h`} hint="nightly average" />
-                <Stat label="HRV" value={`${s.hrv}ms`} />
-                <Stat label="Last check-in" value={`${s.daysSinceCheckIn}d ago`} />
-                <Stat label="Calendar" value={s.calendarLoad} hint="this week" />
-              </div>
-              <div className="mt-3">
-                <IngestionPanel client={client} />
-              </div>
-            </section>
-
-            <section>
-              <h2 className="mb-3 text-eyebrow text-neutral-400">
-                Why &mdash; top drivers
-              </h2>
-              <DriverList drivers={topDrivers} />
-              <p className="mt-2 text-xs text-neutral-500">
-                Transparent weighted sum: each driver adds its points.
-              </p>
-            </section>
+            <IngestionPanel client={client} />
           </div>
 
           {/* RIGHT — action */}
