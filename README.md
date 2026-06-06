@@ -1,62 +1,37 @@
 # Kairos
 
-**Kairos predicts the moment someone is about to break a commitment to themselves — and intervenes at that exact moment with the right psychological lever.**
+**Predicts the moment someone is about to break a commitment to themselves — and intervenes at that exact moment with the right psychological lever.**
 
-> *Kairos* (καιρός): the opportune, decisive moment. Not just *when* to act, but the *right* time to act.
-
----
+🔗 **Live demo:** https://kairos-git-live-mode-ethans-projects-273fecd4.vercel.app/
 
 ## The problem
-
-Silent client drop-off is the #1 churn driver for online coaches. People don't quit with a cancellation email — they go quiet, miss a session, then another, and by the time a coach notices, they're already gone. One human can't watch a full roster closely enough to catch every wobble in time. The signal is there (recovery dipping, sessions slipping, replies slowing); nobody is watching it at 6pm on a Thursday when it matters.
+Online coaches lose more clients to silent drop-off than to anything else. One coach can't watch 100 clients for the exact moment each is about to quit — so people drift, go quiet, and cancel before the coach ever notices.
 
 ## How it works — the loop
+Kairos runs a closed loop on every client, continuously:
+1. **Predict** — a transparent risk score flags who's about to slip, and why (named drivers, no black box).
+2. **Diagnose** — it works out the *failure type*: logistical, motivational, physiological, accountability.
+3. **Choose** — it picks the single behavioral lever (from a 9-lever JITAI library) that fits *this* person in *this* state, and names the one it deliberately rejected.
+4. **Time** — it fires the nudge at the predicted moment of vulnerability, drawn from the client's real calendar and slip history.
+5. **Deliver** — the coach approves; the client gets it.
+6. **Learn** — each outcome updates the per-client track record, so the engine gets better at *this* person every cycle.
 
-Kairos runs a closed behavior-change loop, end to end:
-
-1. **Predict** — a transparent risk model scores each client's chance of missing their weekly goal in the next window.
-2. **Explain** — the score breaks down into **named drivers** ("Recovery down 41%", "Gone quiet — 6 days", "Behind pace: 1 of 4"), so the coach trusts it.
-3. **Choose a lever** — an LLM (the JITAI engine) reads the client's full state, the risk drivers, and what's worked for *this* person before, then picks the **single best behavioral lever** from a library of nine (cue trigger, habit stacking, loss aversion, identity framing, friction engineering, …) and explains *why*.
-4. **Deliver** — it crafts the nudge — short, human, on the right channel, at the right time — and shows it as the client would receive it.
-5. **Measure & learn** — when the client follows through, risk recomputes and visibly drops, and the lever that worked is logged and weighted up for next time. The loop closes and compounds.
-
-The whole story renders on one page per client: **State → Why → Intervention → Loop.**
+## Why it's different
+Every churn tool stops at diagnosis: a risk score with named drivers. That's commodity. Kairos does the part none of them do — decide *which* psychological lever will work on *this* person, *right now*, fire it at the right moment, and learn from whether it worked. They built a filing cabinet; we built an early-warning system with a hand on the lever.
 
 ## Why now
-
-JITAI — Just-In-Time Adaptive Intervention — has strong academic backing but stayed stuck in research labs. The reason: every study had to **hand-build decision rules per behavior** ("if step count < X and time = evening and weather = clear, then prompt"). That doesn't scale past a single study and a single habit. An LLM now does the per-person *"which lever, for whom, delivered how and when"* reasoning directly — cheaply, in one call, generalizing across people and behaviors. The hard part of JITAI just became a prompt.
+JITAI (Just-In-Time Adaptive Interventions) is an established behavioral-science field, but it stayed locked in academia: every study hand-built its decision rules per behavior with a research team, so it couldn't generalize or scale. LLMs collapse that cost — the "which lever, for whom, at what moment" reasoning now runs per person, cheaply, over messy signals. That's the unlock.
 
 ## What's real vs. illustrative
+Built in a day, so we're explicit about the line:
+- **Real:** the LLM lever selection + reasoning + rejected-lever discrimination (live Claude calls); the transparent, explainable risk model; the closed-loop logic; the per-client track record derived from each client's history.
+- **Illustrative:** the client roster + signals are seeded; the client's follow-through is simulated; the live activity feed is dramatized from real roster state. Whether a lever actually changes behavior is what the loop is *built to measure* — the first thing we'd validate with design-partner coaches.
 
-Being honest about the seams:
-
-| | |
-|---|---|
-| **Real** | The LLM lever selection + reasoning (one Sonnet call per intervention, grounded in the client's actual signals and history). The explainable, rule-based risk model. The closed loop — risk genuinely recomputes from the same model after follow-through. |
-| **Illustrative** | The client signal data is seeded (no wearable/calendar integrations yet). The client's "response" is simulated on a button click rather than observed in the wild. |
-
-Nothing about the reasoning or the scoring is faked — feed real signals in and the same machinery runs. What's stubbed is the data pipes at either end.
+## Roadmap
+Today Kairos runs on the data coaches already have (sessions, recovery, check-ins, calendar). Next: live wearable sync (Whoop/Garmin/Oura), weather, location. And the engine is behavior-agnostic — a loop that learns which intervention moves a real person at the right moment isn't really about fitness. It extends to any high-stakes adherence problem: medication, chronic care, recovery. Coaching is how we get in.
 
 ## Stack
+Next.js (App Router, TypeScript) · Tailwind · server-side Anthropic Claude (Sonnet) for the intervention engine · Vercel. No database — seeded/in-memory for the demo.
 
-- **Next.js** (App Router, TypeScript, Tailwind) — single app, no separate backend
-- **Anthropic** Claude **Sonnet**, called server-side for lever selection (one call per generate, no streaming)
-- **Vercel** for deploy
-
-The risk model and the loop are pure, client-safe functions, so the loop runs in React state — instant, and resilient to a flaky connection during a live demo.
-
-### Run locally
-
-```bash
-npm install
-cp .env.local.example .env.local   # add your ANTHROPIC_API_KEY
-npm run dev
-```
-
-Without a key, intervention generation falls back to a hand-written nudge so the demo always renders.
-
----
-
-**Live demo:** _<placeholder — Vercel URL>_
-
-**Team:** Ethan & David — ethan@visionary-one.com
+## Team
+Built at the AI BEAVERS founder hackathon, Hamburg, June 6 2026 — by Ethan Morkel & David Britz. Contact: ethan@visionary-one.com.
