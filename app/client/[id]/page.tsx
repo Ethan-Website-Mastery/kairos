@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getClient, riskOf } from "@/lib/data";
 import RiskBadge from "@/components/RiskBadge";
 import DriverList from "@/components/DriverList";
+import IngestionPanel from "@/components/IngestionPanel";
 import InterventionPanel from "@/components/InterventionPanel";
 
 const barColor = { Low: "bg-emerald-500", Medium: "bg-amber-500", High: "bg-rose-500" };
@@ -91,6 +92,9 @@ export default async function ClientPage({
             value={`${s.daysSinceCheckIn}d ago`}
           />
           <Stat label="Calendar" value={s.calendarLoad} hint="this week" />
+        </div>
+        <div className="mt-3">
+          <IngestionPanel client={client} />
         </div>
       </section>
 
