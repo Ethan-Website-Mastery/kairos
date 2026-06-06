@@ -23,6 +23,7 @@ Rules:
 - Diagnosing the failure TYPE is the core of your job: decide whether the risk is logistical, motivational, physiological, or accountability-driven, then pick the lever that matches THAT type — and name one lever you deliberately rejected and why it's wrong for this person. Also identify the specific upcoming moment they're most likely to slip, grounded in their actual signals (calendar, quiet streak, recovery), and time the nudge to land just before it. Never invent a moment the signals don't support.
 - Match tone and timing to their state: low recovery + gone quiet calls for warm and low-pressure, never guilt.
 - The message must be short (1-2 sentences), human, and sendable to the client exactly as written.
+- Be ruthless about length. HARD CAPS: reasoning ≤ 2 sentences; predictedMoment ≤ 1 punchy line (lead with the moment, keep the justification minimal); rejected.why ≤ 1 sentence; message 1-2 sentences. Cut filler.
 - Output ONLY valid JSON. No markdown, no code fences, no commentary.`;
 
 function buildUserMessage(client: Client, risk: RiskResult): string {
@@ -60,13 +61,13 @@ ${levers}
 Respond with JSON only in this exact shape:
 {
   "leverId": "<one library id>",
-  "reasoning": "<2-3 sentences grounded in this person's specific signals + history>",
+  "reasoning": "<= 2 sentences grounded in this person's specific signals + history>",
   "message": "<the nudge the client receives, 1-2 sentences>",
   "channel": "<push notification | WhatsApp | in-app>",
   "timing": "<e.g. Today 6:30pm, before her usual gym window>",
   "tone": "<e.g. warm, low-pressure>",
-  "rejected": { "leverName": "<a plausible lever Kairos deliberately did NOT pick>", "why": "<one line: why it's wrong for THIS person's failure type>" },
-  "predictedMoment": "<specific upcoming moment of vulnerability, grounded in a real driver — e.g. 'her next planned session, calendar packed with no clear gym window'>"
+  "rejected": { "leverName": "<a plausible lever Kairos deliberately did NOT pick>", "why": "<= 1 sentence: why it's wrong for THIS person's failure type>" },
+  "predictedMoment": "<= 1 punchy line; moment leads, justification minimal — e.g. 'Tomorrow 7am — her only open window before a packed day'>"
 }`;
 }
 

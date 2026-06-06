@@ -77,7 +77,7 @@ export function genericFallback(clientId: string): Intervention {
     leverId: lever.id,
     leverName: lever.name,
     reasoning:
-      "Defaulting to a gentle context cue while the live recommendation is unavailable — a low-pressure reminder tied to their day is the safest nudge when we're unsure.",
+      "A gentle context cue is the safest nudge while the live recommendation is unavailable. Tie the session to something already in their day rather than adding pressure.",
     message:
       "Quick one — when you wrap up today, that's your cue for a short session. Even 20 minutes counts. 💪",
     channel: "push notification",
@@ -85,9 +85,9 @@ export function genericFallback(clientId: string): Intervention {
     tone: "warm, low-pressure",
     rejected: {
       leverName: "Loss aversion / streak",
-      why: "no streak to protect yet — threatening a loss would only add pressure.",
+      why: "No streak to protect yet — threatening a loss would only add pressure.",
     },
-    predictedMoment: "the end of today, when the day slips by without a session slotted in",
+    predictedMoment: "Later today — the window closes if no session gets booked.",
   };
 }
 
@@ -102,17 +102,17 @@ export const FALLBACKS: Record<string, Intervention> = {
     leverId: "friction",
     leverName: "Friction engineering",
     reasoning:
-      "Maya's recovery is down and her week is packed, so the barrier is logistical, not motivation. Shorter sessions have worked for her during busy stretches before, so we remove friction by shrinking the ask rather than pushing harder.",
+      "Maya's barrier is logistical, not motivational — packed calendar, no clear gym window. Shorter 20-min sessions have worked for her in busy weeks, so Kairos removes the friction instead of pushing harder.",
     message:
       "Hey Maya — brutal week, I see it. Let's not aim for the full hour: 20 minutes before your first meeting tomorrow and we call it a win. I'll have it ready.",
     channel: "WhatsApp",
-    timing: "Tonight 8:00pm, ahead of tomorrow morning",
+    timing: "Tomorrow 7:00am, before her first meeting",
     tone: "warm, low-pressure",
     rejected: {
       leverName: "Identity-based framing",
-      why: "a motivational pep talk misreads the problem — Maya isn't lacking willpower, her week is logistically packed.",
+      why: "A pep talk misreads the problem — she isn't short on willpower, her week is logistically packed.",
     },
     predictedMoment:
-      "tomorrow morning before her first meeting — her last open window before a packed Thu–Fri with no gym slot",
+      "Tomorrow 7am — her only open window before a packed day. Miss it and the week's unrecoverable.",
   },
 };
