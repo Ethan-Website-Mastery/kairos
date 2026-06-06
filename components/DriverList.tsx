@@ -10,21 +10,16 @@ export default function DriverList({ drivers }: { drivers: Driver[] }) {
   }
 
   return (
-    <ul className="flex flex-col gap-3">
+    <ul className="flex flex-col divide-y divide-neutral-100 rounded-xl border border-neutral-200/80 bg-white">
       {drivers.map((driver) => (
-        <li
-          key={driver.label}
-          className="flex items-center gap-4 rounded-xl border border-neutral-200/80 bg-white p-4"
-        >
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-neutral-100 text-xs font-semibold tabular-nums text-neutral-600">
+        <li key={driver.label} className="flex items-center gap-3 px-4 py-2.5">
+          <span className="flex h-6 w-7 shrink-0 items-center justify-center rounded-md bg-neutral-100 text-[11px] font-semibold tabular-nums text-neutral-600">
             +{driver.weight}
           </span>
-          <div className="min-w-0">
-            <p className="text-sm font-medium text-neutral-900">
-              {driver.label}
-            </p>
-            <p className="text-sm text-neutral-500">{driver.detail}</p>
-          </div>
+          <p className="min-w-0 truncate text-sm text-neutral-700">
+            <span className="font-medium text-neutral-900">{driver.label}</span>
+            <span className="text-neutral-400"> — {driver.detail}</span>
+          </p>
         </li>
       ))}
     </ul>

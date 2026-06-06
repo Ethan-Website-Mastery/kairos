@@ -9,10 +9,10 @@ const barColor = { Low: "bg-emerald-500", Medium: "bg-amber-500", High: "bg-rose
 
 function Stat({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
-    <div className="rounded-xl border border-neutral-200/80 bg-white p-4">
-      <p className="text-xs font-medium text-neutral-400">{label}</p>
-      <p className="mt-1 text-lg font-semibold text-neutral-900">{value}</p>
-      {hint && <p className="text-xs text-neutral-400">{hint}</p>}
+    <div className="rounded-lg border border-neutral-200/80 bg-white px-3 py-2">
+      <p className="text-[11px] font-medium text-neutral-400">{label}</p>
+      <p className="mt-0.5 text-sm font-semibold text-neutral-900">{value}</p>
+      {hint && <p className="text-[11px] text-neutral-400">{hint}</p>}
     </div>
   );
 }
@@ -49,18 +49,18 @@ export default async function ClientPage({
         <RiskBadge level={level} />
       </div>
 
-      {/* Risk score */}
-      <section className="mt-8 rounded-2xl border border-neutral-200/80 bg-white p-6">
+      {/* Risk score — compact diagnosis */}
+      <section className="mt-6 rounded-xl border border-neutral-200/80 bg-white px-5 py-4">
         <div className="flex items-baseline justify-between">
           <p className="text-sm font-medium text-neutral-500">
             Risk of missing the goal this window
           </p>
-          <p className="text-3xl font-semibold tabular-nums text-neutral-900">
+          <p className="text-xl font-semibold tabular-nums text-neutral-900">
             {score}
-            <span className="text-base font-normal text-neutral-400">/100</span>
+            <span className="text-sm font-normal text-neutral-400">/100</span>
           </p>
         </div>
-        <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-neutral-100">
+        <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-neutral-100">
           <div
             className={`h-full rounded-full ${barColor[level]}`}
             style={{ width: `${score}%` }}
@@ -69,11 +69,11 @@ export default async function ClientPage({
       </section>
 
       {/* Current state */}
-      <section className="mt-12">
-        <h2 className="mb-4 text-xs font-medium uppercase tracking-wider text-neutral-400">
+      <section className="mt-6">
+        <h2 className="mb-3 text-xs font-medium uppercase tracking-wider text-neutral-400">
           Current state
         </h2>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        <div className="grid grid-cols-3 gap-2 sm:grid-cols-6">
           <Stat
             label="Sessions"
             value={`${s.sessionsLogged} / ${s.weeklyGoal}`}
@@ -91,19 +91,19 @@ export default async function ClientPage({
       </section>
 
       {/* Why */}
-      <section className="mt-12">
-        <h2 className="mb-4 text-xs font-medium uppercase tracking-wider text-neutral-400">
+      <section className="mt-6">
+        <h2 className="mb-3 text-xs font-medium uppercase tracking-wider text-neutral-400">
           Why &mdash; top drivers
         </h2>
         <DriverList drivers={topDrivers} />
-        <p className="mt-3 text-xs text-neutral-400">
-          Score is a transparent weighted sum: each driver above adds its points.
+        <p className="mt-2 text-xs text-neutral-400">
+          Transparent weighted sum: each driver adds its points.
         </p>
       </section>
 
-      {/* Intervention + loop */}
-      <section className="mt-12">
-        <h2 className="mb-4 text-xs font-medium uppercase tracking-wider text-neutral-400">
+      {/* Intervention + loop — the hero of the page */}
+      <section className="mt-12 border-t border-neutral-200 pt-10">
+        <h2 className="mb-4 text-sm font-semibold tracking-tight text-neutral-900">
           Intervention
         </h2>
         <InterventionPanel client={client} />
