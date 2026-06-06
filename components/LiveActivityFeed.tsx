@@ -52,7 +52,7 @@ const DOT: Record<Tone, string> = {
   info: "bg-neutral-400",
 };
 
-export default function LiveActivityFeed() {
+export default function LiveActivityFeed({ ops = false }: { ops?: boolean }) {
   const [rows, setRows] = useState<{ id: number; time: string; ev: Ev }[]>([]);
   const events = useRef<Ev[]>(buildEvents());
   const cursor = useRef(0);
@@ -74,10 +74,20 @@ export default function LiveActivityFeed() {
   }, []);
 
   return (
-    <div className="elev-card flex h-full flex-col rounded-2xl border border-neutral-200/70 bg-white p-5">
+    <div
+      className={`flex h-full flex-col rounded-2xl p-5 ${
+        ops
+          ? "border border-white/10 bg-white/5"
+          : "elev-card border border-neutral-200/70 bg-white"
+      }`}
+    >
       <div className="mb-3 flex items-center gap-2">
         <p className="text-eyebrow text-neutral-400">Activity</p>
-        <span className="inline-flex items-center gap-1 text-[10px] font-medium text-emerald-600">
+        <span
+          className={`inline-flex items-center gap-1 text-[10px] font-medium ${
+            ops ? "text-emerald-400" : "text-emerald-600"
+          }`}
+        >
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
           live
         </span>
@@ -88,11 +98,19 @@ export default function LiveActivityFeed() {
             key={r.id}
             className="animate-rise flex items-center gap-2.5 text-xs"
           >
-            <span className="shrink-0 font-mono tabular-nums text-neutral-400">
+            <span
+              className={`shrink-0 font-mono tabular-nums ${
+                ops ? "text-neutral-500" : "text-neutral-400"
+              }`}
+            >
               {r.time}
             </span>
             <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${DOT[r.ev.tone]}`} />
-            <span className="truncate text-neutral-700">{r.ev.text}</span>
+            <span
+              className={`truncate ${ops ? "text-neutral-300" : "text-neutral-700"}`}
+            >
+              {r.ev.text}
+            </span>
           </li>
         ))}
       </ul>
