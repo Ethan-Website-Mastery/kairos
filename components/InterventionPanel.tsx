@@ -60,12 +60,13 @@ export default function InterventionPanel({ client }: { client: Client }) {
     ? leverTrackRecord(intervention.leverId, client.signals.history)
     : 0;
 
-  // Payoff animation — only runs once the coach approves & sends.
+  // Payoff animations — only run once the coach approves & sends.
   const sessVal = useCountTo(
     client.signals.sessionsLogged,
     improved.sessionsLogged,
     approved,
   );
+  const trVal = useCountTo(trackRecord, trackRecord + 1, approved);
 
   async function draft() {
     setApproved(false);
@@ -175,16 +176,10 @@ export default function InterventionPanel({ client }: { client: Client }) {
     );
   }
 
-  const steps = buildLoopEvents(client, before, intervention, trackRecord);
-
-  // Honest, deterministic track-record line — no invented ratio.
   const lever = intervention.leverName;
-  const times =
-    trackRecord === 1 ? "once" : trackRecord === 2 ? "twice" : `${trackRecord} times`;
-  const trackLine =
-    trackRecord > 0
-      ? `${lever} has worked for ${firstName} ${times} before — Kairos logs this as success #${trackRecord + 1} and weights it higher.`
-      : `${lever} is a new play for ${firstName} — Kairos weights it higher with each success.`;
+  // Condensed loop — the key beats: predict → intervene → learn.
+  const allSteps = buildLoopEvents(client, before, intervention, trackRecord);
+  const steps = [allSteps[0], allSteps[1], allSteps[3]];
 
   return (
     <div className="flex flex-col gap-4">
@@ -309,42 +304,34 @@ export default function InterventionPanel({ client }: { client: Client }) {
               honest count from history, not a fabricated percentage. */}
           <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500/15 to-transparent p-6 ring-1 ring-emerald-400/30 shadow-[0_0_40px_-12px_rgba(16,185,129,0.4)]">
             <p className="text-eyebrow text-emerald-300">Track record</p>
-            <p className="mt-2 text-[15px] font-medium leading-relaxed text-neutral-100">
-              {trackLine}
-            </p>
 
-            {/* one pip per logged success: prior wins + this newly confirmed one */}
-            <div className="mt-4 flex flex-wrap items-center gap-1.5">
-              {Array.from({ length: trackRecord }, (_, i) => (
-                <span
-                  key={`prior-${i}`}
-                  className="flex h-6 w-6 items-center justify-center rounded-md bg-emerald-500/20 text-xs font-bold text-emerald-300"
-                >
-                  ✓
-                </span>
-              ))}
-              <span className="animate-rise flex h-6 w-6 items-center justify-center rounded-md bg-emerald-500 text-xs font-bold text-neutral-950 ring-2 ring-emerald-400/40">
-                ✓
+            {/* Big glanceable stat — animates on approve, not prose */}
+            <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2">
+              <span className="rounded-lg bg-emerald-500/15 px-2.5 py-1 text-sm font-medium text-emerald-200 ring-1 ring-inset ring-emerald-400/30">
+                {lever}
               </span>
-              <span className="ml-1 text-sm text-neutral-400">
-                logged as #{trackRecord + 1}, weighted higher
+              <span className="text-4xl font-bold tabular-nums leading-none text-white">
+                {trVal}×
+              </span>
+              <span className="text-lg font-semibold text-emerald-300">✓ ↑</span>
+              <span className="text-sm text-neutral-400">
+                worked for {firstName}
               </span>
             </div>
-
-            {/* honest follow-through action */}
-            <span className="animate-flash mt-4 inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm ring-1 ring-emerald-400/30">
-              <span className="text-neutral-400">{firstName} logged the session</span>
-              <span className="font-semibold tabular-nums text-neutral-100">
-                {sessVal}/{client.signals.weeklyGoal}
+            <p className="mt-2 text-xs text-neutral-400">
+              {trackRecord > 0
+                ? `logged as #${trackRecord + 1}`
+                : "first win logged"}{" "}
+              · weighted higher next time ·{" "}
+              <span className="animate-flash rounded px-1 font-medium text-neutral-200">
+                session {sessVal}/{client.signals.weeklyGoal}
               </span>
-            </span>
+            </p>
           </div>
 
-          {/* The flywheel */}
+          {/* The flywheel — condensed to its key beats */}
           <div className="rounded-2xl border border-white/10 bg-white/5 p-6">
-            <p className="mb-4 text-sm font-medium text-neutral-400">
-              Closing the loop
-            </p>
+            <p className="mb-4 text-eyebrow text-neutral-400">Closing the loop</p>
             <LoopTimeline steps={steps} />
           </div>
 
