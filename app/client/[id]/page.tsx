@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getClient, riskOf } from "@/lib/data";
 import RiskBadge from "@/components/RiskBadge";
 import DriverList from "@/components/DriverList";
+import InterventionPanel from "@/components/InterventionPanel";
 
 const barColor = { Low: "bg-emerald-500", Medium: "bg-amber-500", High: "bg-rose-500" };
 
@@ -96,6 +97,12 @@ export default async function ClientPage({
         <p className="mt-3 text-xs text-neutral-400">
           Score is a transparent weighted sum: each driver above adds its points.
         </p>
+      </section>
+
+      {/* Intervention */}
+      <section className="mt-8">
+        <h2 className="mb-3 text-sm font-medium text-neutral-500">Intervention</h2>
+        <InterventionPanel clientId={client.id} />
       </section>
     </main>
   );
