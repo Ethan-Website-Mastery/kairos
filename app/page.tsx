@@ -4,6 +4,7 @@ import { clients, riskOf } from "@/lib/data";
 import { FALLBACKS } from "@/lib/interventions";
 import RosterCard from "@/components/RosterCard";
 import RosterPulse from "@/components/RosterPulse";
+import LiveActivityFeed from "@/components/LiveActivityFeed";
 import {
   UsersIcon,
   AlertIcon,
@@ -49,9 +50,12 @@ export default function Dashboard() {
 
   return (
     <div className="mx-auto w-full max-w-6xl">
-      {/* Living roster — the memorability signature */}
-      <div className="mb-6">
-        <RosterPulse />
+      {/* Command-center hero: living roster + live activity feed */}
+      <div className="mb-6 grid gap-5 lg:grid-cols-3">
+        <div className="lg:col-span-2">
+          <RosterPulse />
+        </div>
+        <LiveActivityFeed />
       </div>
 
       {/* Page header */}
