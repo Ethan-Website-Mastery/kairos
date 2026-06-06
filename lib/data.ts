@@ -89,6 +89,82 @@ export const clients: Client[] = [
       },
     },
   },
+  {
+    id: "aisha-khan",
+    name: "Aisha Khan",
+    weeklyGoal: "4 sessions/week",
+    signals: {
+      sleepHrs: 6.8,
+      hrv: 55,
+      recoveryPct: 58,
+      sessionsLogged: 2,
+      weeklyGoal: 4,
+      daysSinceCheckIn: 2,
+      calendarLoad: "busy",
+      nudgeResponseLatencyHrs: 5,
+      history: {
+        pastSlips: ["Stopped for a month after moving apartments"],
+        leversThatWorked: ["Booking classes a week ahead", "A Monday gym buddy"],
+      },
+    },
+  },
+  {
+    id: "marcus-lee",
+    name: "Marcus Lee",
+    weeklyGoal: "4 sessions/week",
+    signals: {
+      sleepHrs: 7.4,
+      hrv: 66,
+      recoveryPct: 79,
+      sessionsLogged: 3,
+      weeklyGoal: 4,
+      daysSinceCheckIn: 1,
+      calendarLoad: "busy",
+      nudgeResponseLatencyHrs: 3,
+      history: {
+        pastSlips: [],
+        leversThatWorked: ["Evening lifting blocks", "Monthly progress photos"],
+      },
+    },
+  },
+  {
+    id: "sofia-romano",
+    name: "Sofia Romano",
+    weeklyGoal: "5 sessions/week",
+    signals: {
+      sleepHrs: 7.6,
+      hrv: 69,
+      recoveryPct: 81,
+      sessionsLogged: 4,
+      weeklyGoal: 5,
+      daysSinceCheckIn: 1,
+      calendarLoad: "light",
+      nudgeResponseLatencyHrs: 2,
+      history: {
+        pastSlips: [],
+        leversThatWorked: ["Streak tracking", "Saturday long ride with the club"],
+      },
+    },
+  },
+  {
+    id: "jordan-hayes",
+    name: "Jordan Hayes",
+    weeklyGoal: "3 sessions/week",
+    signals: {
+      sleepHrs: 5.8,
+      hrv: 58,
+      recoveryPct: 74,
+      sessionsLogged: 2,
+      weeklyGoal: 3,
+      daysSinceCheckIn: 2,
+      calendarLoad: "busy",
+      nudgeResponseLatencyHrs: 6,
+      history: {
+        pastSlips: ["Took December off over the holidays"],
+        leversThatWorked: ["Lunchtime runs between meetings"],
+      },
+    },
+  },
 ];
 
 export function getClient(id: string): Client | undefined {

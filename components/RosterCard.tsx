@@ -16,10 +16,15 @@ export default function RosterCard({ client }: { client: Client }) {
   const { sessionsLogged, weeklyGoal } = client.signals;
   const { level } = riskOf(client);
 
+  const accent =
+    level === "High"
+      ? "border-rose-200 ring-4 ring-rose-50 hover:border-rose-300"
+      : "border-neutral-200/80 hover:border-neutral-300";
+
   return (
     <Link
       href={`/client/${client.id}`}
-      className="group flex flex-col gap-5 rounded-2xl border border-neutral-200/80 bg-white p-6 transition-all hover:border-neutral-300 hover:shadow-[0_2px_20px_-8px_rgba(0,0,0,0.15)]"
+      className={`group flex flex-col gap-5 rounded-2xl border bg-white p-6 transition-all hover:shadow-[0_2px_20px_-8px_rgba(0,0,0,0.15)] ${accent}`}
     >
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
