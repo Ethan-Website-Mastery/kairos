@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { clients, riskOf } from "@/lib/data";
 import { FALLBACKS } from "@/lib/interventions";
 import RosterCard from "@/components/RosterCard";
+import RosterPulse from "@/components/RosterPulse";
 import {
   UsersIcon,
   AlertIcon,
@@ -48,6 +49,11 @@ export default function Dashboard() {
 
   return (
     <div className="mx-auto w-full max-w-6xl">
+      {/* Living roster — the memorability signature */}
+      <div className="mb-6">
+        <RosterPulse />
+      </div>
+
       {/* Page header */}
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>

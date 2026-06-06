@@ -160,10 +160,63 @@ body {
   animation: kairos-flash 1000ms ease-out;
 }
 
+/* Roster pulse — early-warning "breathing" rings. Calmer when on track,
+   urgent + glowing when about to slip. */
+@keyframes pulse-calm {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
+  50% {
+    box-shadow: 0 0 0 5px rgba(16, 185, 129, 0.12);
+  }
+}
+
+@keyframes pulse-watch {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(217, 119, 6, 0);
+  }
+  50% {
+    box-shadow: 0 0 0 5px rgba(217, 119, 6, 0.22);
+  }
+}
+
+@keyframes pulse-alert {
+  0%,
+  100% {
+    box-shadow: 0 0 6px 1px rgba(225, 29, 72, 0.45);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 16px 7px rgba(225, 29, 72, 0.55);
+    transform: scale(1.06);
+  }
+}
+
+.pulse-calm {
+  animation: pulse-calm 4s ease-in-out infinite;
+}
+
+.pulse-watch {
+  animation: pulse-watch 2.4s ease-in-out infinite;
+}
+
+.pulse-alert {
+  animation: pulse-alert 1.3s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-notif,
   .animate-rise,
-  .animate-flash {
+  .animate-flash,
+  .pulse-calm,
+  .pulse-watch,
+  .pulse-alert {
     animation: none;
+  }
+  /* Keep a static glow so the high-risk client still stands out without motion. */
+  .pulse-alert {
+    box-shadow: 0 0 12px 4px rgba(225, 29, 72, 0.5);
   }
 }
