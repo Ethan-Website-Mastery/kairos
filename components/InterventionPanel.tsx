@@ -210,22 +210,22 @@ export default function InterventionPanel({ client }: { client: Client }) {
         </div>
       ) : (
         <div className="flex flex-col gap-4">
-          {/* Updated risk with an animated drop */}
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50/50 p-5">
+          {/* THE CLIMAX — risk falls. The single most dramatic moment. */}
+          <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-50 to-white p-6 ring-1 ring-emerald-200/80 shadow-[0_8px_40px_-12px_rgba(16,185,129,0.35)]">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
-                <p className="text-xs font-medium text-emerald-700">
+                <p className="text-[11px] font-semibold uppercase tracking-widest text-emerald-700">
                   Risk after follow-through
                 </p>
-                <div className="mt-1 flex items-baseline gap-3">
-                  <span className="text-2xl font-semibold tabular-nums text-neutral-400 line-through">
+                <div className="mt-2 flex items-baseline gap-3">
+                  <span className="text-3xl font-semibold tabular-nums text-neutral-300 line-through">
                     {before.score}
                   </span>
-                  <span className="text-emerald-600">↓</span>
-                  <span className="text-3xl font-semibold tabular-nums text-neutral-900">
+                  <span className="text-2xl text-emerald-500">↓</span>
+                  <span className="text-6xl font-bold tabular-nums leading-none text-neutral-900">
                     {scoreVal}
                   </span>
-                  <span className="text-sm font-medium text-emerald-700">
+                  <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-sm font-semibold text-emerald-700">
                     −{drop}
                   </span>
                 </div>
@@ -238,7 +238,7 @@ export default function InterventionPanel({ client }: { client: Client }) {
             </div>
 
             {/* bar tracks the count-down, colour shifts red → amber → green */}
-            <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-white/70">
+            <div className="mt-5 h-2.5 w-full overflow-hidden rounded-full bg-neutral-200/60">
               <div
                 className={`h-full rounded-full transition-all duration-300 ${colorForScore(scoreVal)}`}
                 style={{ width: `${scoreVal}%` }}
@@ -246,8 +246,8 @@ export default function InterventionPanel({ client }: { client: Client }) {
             </div>
 
             {/* session ticks up with a brief highlight */}
-            <span className="animate-flash mt-3 inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm">
-              <span className="text-neutral-400">Sessions</span>
+            <span className="animate-flash mt-4 inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm ring-1 ring-emerald-200/60">
+              <span className="text-neutral-500">Sessions</span>
               <span className="font-semibold tabular-nums text-neutral-900">
                 {sessVal}/{client.signals.weeklyGoal}
               </span>
