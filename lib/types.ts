@@ -36,14 +36,20 @@ export interface Prediction {
   confidence: number;
 }
 
-/** A concrete suggested action to keep a client on track. */
+/**
+ * A generated intervention: the single chosen behavioral lever plus the
+ * crafted nudge. `leverName` is filled server-side from the canonical
+ * library — never from the model's output.
+ */
 export interface Intervention {
-  id: string;
   clientId: string;
-  title: string;
-  rationale: string;
-  channel: "push" | "sms" | "email" | "call";
-  effort: "low" | "medium" | "high";
+  leverId: string;
+  leverName: string;
+  reasoning: string;
+  message: string;
+  channel: string;
+  timing: string;
+  tone: string;
 }
 
 /** One step in the predict → intervene → observe loop, for auditing. */
