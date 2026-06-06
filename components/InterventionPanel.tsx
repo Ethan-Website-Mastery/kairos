@@ -11,6 +11,7 @@ import {
 } from "@/lib/loop";
 import InterventionCard from "./InterventionCard";
 import PatternMemory from "./PatternMemory";
+import ClientPreview from "./ClientPreview";
 import LoopTimeline from "./LoopTimeline";
 
 /** Animate an integer from `from` to `to` once `run` flips true (eased). */
@@ -200,6 +201,23 @@ export default function InterventionPanel({ client }: { client: Client }) {
           <InterventionCard
             intervention={intervention}
             memory={<PatternMemory client={client} />}
+          />
+
+          <ClientPreview
+            id={client.id}
+            firstName={firstName}
+            message={intervention.message}
+            channel={intervention.channel}
+            actionLabel={
+              client.signals.openWindows[0]
+                ? `Lock ${client.signals.openWindows[0]}`
+                : "I'm in"
+            }
+            confirmText={
+              client.signals.openWindows[0]
+                ? `Locked in — see you ${client.signals.openWindows[0]}.`
+                : "You're in — let's go."
+            }
           />
 
           <div className="flex flex-wrap items-center gap-3">

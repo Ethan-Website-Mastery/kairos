@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import type { Intervention } from "@/lib/types";
 import { getLever } from "@/lib/interventions";
-import PhoneMock from "./PhoneMock";
 
 function Meta({ label, value }: { label: string; value: string }) {
   return (
@@ -77,26 +76,22 @@ export default function InterventionCard({
       {/* Pattern memory grounds the lever choice in this person's real past. */}
       {memory && <div className="mt-3">{memory}</div>}
 
-      <div className="mt-4 grid gap-6 sm:grid-cols-[1fr_auto] sm:items-start">
-        <div>
-          <p className="text-[15px] leading-relaxed text-neutral-800">
-            {intervention.reasoning}
-          </p>
+      <div className="mt-4">
+        <p className="text-[15px] leading-relaxed text-neutral-800">
+          {intervention.reasoning}
+        </p>
 
-          <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs">
-            <Meta label="Channel" value={intervention.channel} />
-            {!hasMoment && timing && (
-              <>
-                <span className="text-neutral-200">·</span>
-                <Meta label="Timing" value={timing} />
-              </>
-            )}
-            <span className="text-neutral-200">·</span>
-            <Meta label="Tone" value={intervention.tone} />
-          </div>
+        <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs">
+          <Meta label="Channel" value={intervention.channel} />
+          {!hasMoment && timing && (
+            <>
+              <span className="text-neutral-200">·</span>
+              <Meta label="Timing" value={timing} />
+            </>
+          )}
+          <span className="text-neutral-200">·</span>
+          <Meta label="Tone" value={intervention.tone} />
         </div>
-
-        <PhoneMock message={intervention.message} channel={intervention.channel} />
       </div>
     </div>
   );
