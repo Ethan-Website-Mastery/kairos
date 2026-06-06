@@ -62,7 +62,7 @@ export default function IngestionPanel({ client }: { client: Client }) {
   ];
 
   return (
-    <details className="group rounded-xl border border-neutral-200/80 bg-white elev-card">
+    <details className="group glass rounded-xl">
       <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-5 py-4 [&::-webkit-details-marker]:hidden">
         <div>
           <p className="text-sm font-medium text-neutral-900">

@@ -283,7 +283,7 @@ export default function InterventionPanel({ client }: { client: Client }) {
         <div className="flex flex-col gap-4">
           {/* THE CLIMAX — confidence rises. The system's belief, not a behaviour
               prediction. */}
-          <div className="elev-climax overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-50 to-white p-6 ring-1 ring-emerald-200/80">
+          <div className="elev-climax overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-50/80 to-white/40 p-6 ring-1 ring-emerald-200/80 backdrop-blur-xl backdrop-saturate-150">
             <p className="text-eyebrow text-emerald-700">
               Confidence in this lever
             </p>

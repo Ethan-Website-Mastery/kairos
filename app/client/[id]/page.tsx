@@ -74,7 +74,7 @@ export default async function ClientPage({
       </section>
 
       {/* Current state */}
-      <section className="mt-6">
+      <section className="mt-8">
         <h2 className="mb-3 text-eyebrow text-neutral-400">
           Current state
         </h2>
@@ -99,7 +99,7 @@ export default async function ClientPage({
       </section>
 
       {/* Why */}
-      <section className="mt-6">
+      <section className="mt-8">
         <h2 className="mb-3 text-eyebrow text-neutral-400">
           Why &mdash; top drivers
         </h2>
