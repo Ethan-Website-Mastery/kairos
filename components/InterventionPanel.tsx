@@ -209,7 +209,7 @@ export default function InterventionPanel({ client }: { client: Client }) {
           </button>
         </div>
       ) : (
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-4">
           {/* Updated risk with an animated drop */}
           <div className="rounded-2xl border border-emerald-200 bg-emerald-50/50 p-5">
             <div className="flex flex-wrap items-center justify-between gap-4">
