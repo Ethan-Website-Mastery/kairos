@@ -3,10 +3,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { Client, Intervention } from "@/lib/types";
 import { computeRisk } from "@/lib/risk";
-import { improvedSignals, buildLoopEvents } from "@/lib/loop";
+import {
+  improvedSignals,
+  buildLoopEvents,
+  leverConfidence,
+  confidenceAfter,
+} from "@/lib/loop";
 import InterventionCard from "./InterventionCard";
 import LoopTimeline from "./LoopTimeline";
-import RiskBadge from "./RiskBadge";
 
 /** Animate an integer from `from` to `to` once `run` flips true (eased). */
 function useCountTo(from: number, to: number, run: boolean, duration = 600) {
@@ -31,13 +35,6 @@ function useCountTo(from: number, to: number, run: boolean, duration = 600) {
   return value;
 }
 
-/** Same thresholds as the risk model (HIGH ≥ 65, MEDIUM ≥ 30). */
-function colorForScore(score: number): string {
-  if (score >= 65) return "bg-rose-500";
-  if (score >= 30) return "bg-amber-500";
-  return "bg-emerald-500";
-}
-
 const REVEAL_LAST = 4; // index of the final reveal step
 const REVEAL_INTERVAL = 500;
 
@@ -56,16 +53,18 @@ export default function InterventionPanel({ client }: { client: Client }) {
     [client],
   );
   const improved = useMemo(() => improvedSignals(client.signals), [client]);
-  const after = useMemo(
-    () => computeRisk(improved, client.signals.history),
-    [improved, client.signals.history],
-  );
 
   const atRisk = before.level !== "Low";
   const firstName = client.name.split(" ")[0];
 
+  // Confidence is grounded in this person's history, not a magic number.
+  const conf = intervention
+    ? leverConfidence(intervention.leverId, client.signals.history)
+    : 0;
+  const confNext = intervention ? confidenceAfter(conf) : 0;
+
   // Payoff animations — only run once the coach approves & sends.
-  const scoreVal = useCountTo(before.score, after.score, approved);
+  const confVal = useCountTo(conf, confNext, approved);
   const sessVal = useCountTo(
     client.signals.sessionsLogged,
     improved.sessionsLogged,
@@ -180,8 +179,7 @@ export default function InterventionPanel({ client }: { client: Client }) {
     );
   }
 
-  const drop = before.score - after.score;
-  const steps = buildLoopEvents(client, before, intervention, after);
+  const steps = buildLoopEvents(client, before, intervention, conf, confNext);
 
   return (
     <div className="flex flex-col gap-4">
@@ -261,44 +259,41 @@ export default function InterventionPanel({ client }: { client: Client }) {
 
       {approved && (
         <div className="flex flex-col gap-4">
-          {/* THE CLIMAX — risk falls. The single most dramatic moment. */}
+          {/* THE CLIMAX — confidence rises. The system's belief, not a behaviour
+              prediction. */}
           <div className="elev-climax overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-50 to-white p-6 ring-1 ring-emerald-200/80">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <div>
-                <p className="text-eyebrow text-emerald-700">
-                  Risk after follow-through
-                </p>
-                <div className="mt-2 flex items-baseline gap-3">
-                  <span className="text-3xl font-semibold tabular-nums text-neutral-300 line-through">
-                    {before.score}
-                  </span>
-                  <span className="text-2xl text-emerald-500">↓</span>
-                  <span className="text-6xl font-bold tabular-nums leading-none text-neutral-900">
-                    {scoreVal}
-                  </span>
-                  <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-sm font-semibold text-emerald-700">
-                    −{drop}
-                  </span>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <RiskBadge level={before.level} />
-                <span className="text-neutral-300">→</span>
-                <RiskBadge level={after.level} />
-              </div>
+            <p className="text-eyebrow text-emerald-700">
+              Confidence in this lever
+            </p>
+            <p className="mt-1 text-sm text-neutral-500">
+              Kairos&apos;s belief that {intervention.leverName} works for{" "}
+              {firstName} — grounded in her history, not a prediction of her
+              behaviour.
+            </p>
+            <div className="mt-3 flex items-baseline gap-3">
+              <span className="text-3xl font-semibold tabular-nums text-neutral-300 line-through">
+                {conf}%
+              </span>
+              <span className="text-2xl text-emerald-500">↑</span>
+              <span className="text-6xl font-bold tabular-nums leading-none text-neutral-900">
+                {confVal}%
+              </span>
+              <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-sm font-semibold text-emerald-700">
+                +{confNext - conf}
+              </span>
             </div>
 
-            {/* bar tracks the count-down, colour shifts red → amber → green */}
+            {/* bar tracks the confidence rise */}
             <div className="mt-5 h-2.5 w-full overflow-hidden rounded-full bg-neutral-200/60">
               <div
-                className={`h-full rounded-full transition-all duration-300 ${colorForScore(scoreVal)}`}
-                style={{ width: `${scoreVal}%` }}
+                className="h-full rounded-full bg-emerald-500 transition-all duration-300"
+                style={{ width: `${confVal}%` }}
               />
             </div>
 
-            {/* session ticks up with a brief highlight */}
+            {/* honest follow-through action (not a risk claim) */}
             <span className="animate-flash mt-4 inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm ring-1 ring-emerald-200/60">
-              <span className="text-neutral-500">Sessions</span>
+              <span className="text-neutral-500">{firstName} logged the session</span>
               <span className="font-semibold tabular-nums text-neutral-900">
                 {sessVal}/{client.signals.weeklyGoal}
               </span>
